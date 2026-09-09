@@ -809,97 +809,56 @@ const stopOtherFilmPreviews = (
    PREPARE FILMS
 ========================================================== */
 
-filmItems.forEach(
-  (film) => {
+filmItems.forEach((film) => {
 
-    const asset =
-      ASSET_CONFIG.films.find(
-        (item) =>
-          item.id ===
-          film.dataset.film
-      );
+  const asset = ASSET_CONFIG.films.find(
+    (item) => item.id === film.dataset.film
+  );
 
+  const preview = film.querySelector('.film-preview');
 
-    const preview =
-      film.querySelector(
-        '.film-preview'
-      );
-
-
-    const thumbnail =
-      film.querySelector(
-        '.film-visual img'
-      );
-
-
-    if (
-      !asset ||
-      !preview
-    ) {
-
-      return;
-    }
-
-
-    film.dataset.video =
-      asset.video;
-
-
-    preview.dataset.src =
-      asset.video;
-
-
-    preview.muted =
-      true;
-
-
-    preview.loop =
-      true;
-
-
-    preview.playsInline =
-      true;
-
-
-    preview.preload =
-      'none';
-
-
-    if (
-      thumbnail &&
-      asset.thumbnail
-    ) {
-
-      thumbnail.src =
-        asset.thumbnail;
-
-
-      thumbnail.loading =
-        'lazy';
-
-
-      thumbnail.decoding =
-        'async';
-    }
-
-
-    preview.addEventListener(
-      'error',
-      () => {
-
-        film
-          .querySelector(
-            '.film-poster-slot'
-          )
-          ?.classList.add(
-            'video-error'
-          );
-      }
-    );
+  if (!asset || !preview) {
+    return;
   }
-);
 
+  film.dataset.video = asset.video;
 
+  preview.src = asset.video;
+  preview.muted = true;
+  preview.loop = true;
+  preview.playsInline = true;
+
+  // IMPORTANT:
+  // Load the video immediately so the FIRST FRAME
+  // is visible before the mouse enters the card.
+  preview.preload = 'auto';
+  preview.load();
+
+  preview.addEventListener('loadeddata', () => {
+
+    const posterSlot =
+      film.querySelector('.film-poster-slot');
+
+    posterSlot?.classList.add('has-video');
+
+    // Keep the first frame visible.
+    preview.pause();
+
+    try {
+      preview.currentTime = 0;
+    } catch {}
+
+  }, { once: true });
+
+  preview.addEventListener('error', () => {
+
+    film
+      .querySelector('.film-poster-slot')
+      ?.classList.add('video-error');
+
+  }, { once: true });
+
+});
 /* ==========================================================
    LOAD FILM VIDEO
 ========================================================== */
