@@ -930,7 +930,7 @@ h2 em{
 
   z-index:2;
 
-  opacity:0;
+  opacity:1;
 
   filter:saturate(.72) contrast(1.04);
 
