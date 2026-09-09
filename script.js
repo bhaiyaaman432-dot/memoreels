@@ -15,9 +15,9 @@ const ASSET_CONFIG = {
     image: ''
   },
 
-  about: {
-    image: 'about: {   image: 'images/Untitled.jpg' },'
-  },
+ about: {
+  image: 'images/Untitled.jpg'
+},
 
   films: [
     {
