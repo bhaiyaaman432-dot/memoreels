@@ -46,7 +46,7 @@ const ASSET_CONFIG = {
 
     {
       id: '05',
-      video: 'car-delivery-compressed-25mb.mp4',
+      video: 'car-delivery-5.mp4',
       thumbnail: 'assets/videos/compatible/car-delivery.jpg'
     }
   ],
