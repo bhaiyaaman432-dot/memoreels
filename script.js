@@ -15,23 +15,28 @@ const ASSET_CONFIG = {
   films: [
     {
       id: '01',
-      video: 'wedding-film-compressed-25mb.mp4#t=0.001'
+      video: 'wedding-film-compressed-25mb.mp4',
+      poster: 'images/poster-1.jpg'
     },
     {
       id: '02',
-      video: 'ring-ceremony-compressed-25mb.mp4#t=0.001'
+      video: 'ring-ceremony-compressed-25mb.mp4',
+      poster: 'images/poster-2.jpg'
     },
     {
       id: '03',
-      video: 'welcome-ceremony-final.mp4#t=0.001'
+      video: 'welcome-ceremony-final.mp4',
+      poster: 'images/poster-3.jpg'
     },
     {
       id: '04',
-      video: 'birthday-compressed-25mb.mp4#t=0.001'
+      video: 'birthday-compressed-25mb.mp4',
+      poster: 'images/poster-4.jpg'
     },
     {
       id: '05',
-      video: 'car-delivery-5.mp4#t=0.001'
+      video: 'car-delivery-5.mp4',
+      poster: 'images/poster-5.jpg'
     }
   ],
 
@@ -241,14 +246,14 @@ setImageSource(storyImage, stories.Weddings.image);
 
 
 /* =========================================================
-   FEATURED FILMS - ORIGINAL LOCALHOST BEHAVIOR FIX
+   FEATURED FILMS - PERFECT POSTER IMPLEMENTATION
 ========================================================= */
 
 const filmItems = document.querySelectorAll('.film-item');
 
 document.querySelectorAll('.film-preview').forEach((video) => {
-    // Opacity hamesha 1 rakhenge taaki video ka first frame dikhe!
-    video.style.opacity = '1'; 
+    // Video chupa rahega shuru mein
+    video.style.opacity = '0'; 
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
@@ -260,37 +265,39 @@ document.querySelectorAll('.film-preview').forEach((video) => {
 filmItems.forEach((film) => {
   const asset = ASSET_CONFIG.films.find(item => item.id === film.dataset.film);
   const preview = film.querySelector('.film-preview');
-  
-  // Jo pehle faltu ke img tag the usko ignore karenge
   const posterImg = film.querySelector('img[data-asset-role="film-poster"]');
-  if (posterImg) {
-    posterImg.style.display = 'none'; // Unsplash wali pic chhupao
+
+  if (!asset) return;
+
+  // Asli khel yahan hai: Poster image set kar do aur visible rakho
+  if (asset.poster && posterImg) {
+    posterImg.src = asset.poster;
+    posterImg.style.display = 'block';
   }
 
-  if (!asset || !preview) return;
+  if (!preview) return;
 
-  // Save clean video path for modal (remove #t=0.001)
-  film.dataset.video = asset.video ? asset.video.replace('#t=0.001', '') : '';
-  
+  // Video data set karo
+  film.dataset.video = asset.video || '';
   if (asset.video) {
     preview.src = asset.video;
   }
 
-  // Desktop hover logic
+  // Hover effect: Jab cursor aayega toh video dikhega aur play hoga
   const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   if (canHover) {
     film.addEventListener('pointerenter', () => {
       if (!preview.src) return;
-      preview.muted = true;
+      preview.style.opacity = '1'; // Video dikhao
       preview.play().catch(() => {});
     });
 
     film.addEventListener('pointerleave', () => {
+      preview.style.opacity = '0'; // Wapas photo dikhao
       preview.pause();
       try {
-        // Wapas 0.001 par laao taaki poster image bani rahe
-        preview.currentTime = 0.001;
+        preview.currentTime = 0;
       } catch (e) {}
     });
   }
