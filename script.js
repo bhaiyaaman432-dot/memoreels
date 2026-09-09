@@ -1,51 +1,39 @@
 /*
- * ==========================================================
  * MEMOREELS
- * Main site JavaScript
- * ==========================================================
+ * Main interaction + media configuration
  */
-
-
-/* ==========================================================
-   ASSET CONFIGURATION
-========================================================== */
 
 const ASSET_CONFIG = {
   hero: {
     image: ''
   },
 
- about: {
-  image: 'images/Untitled.jpg'
-},
+  about: {
+    image: 'images/Untitled.jpg'
+  },
 
   films: [
-  {
-    id: '01',
-    video: 'wedding-film-compressed-25mb.mp4',
-    thumbnail: ''
-  },
-  {
-    id: '02',
-    video: 'ring-ceremony-compressed-25mb.mp4',
-    thumbnail: ''
-  },
-  {
-    id: '03',
-    video: 'welcome-ceremony-final.mp4',
-    thumbnail: ''
-  },
-  {
-    id: '04',
-    video: 'birthday-compressed-25mb.mp4',
-    thumbnail: ''
-  },
-  {
-    id: '05',
-    video: 'car-delivery-5.mp4',
-    thumbnail: ''
-  }
-],
+    {
+      id: '01',
+      video: 'wedding-film-compressed-25mb.mp4'
+    },
+    {
+      id: '02',
+      video: 'ring-ceremony-compressed-25mb.mp4'
+    },
+    {
+      id: '03',
+      video: 'welcome-ceremony-final.mp4'
+    },
+    {
+      id: '04',
+      video: 'birthday-compressed-25mb.mp4'
+    },
+    {
+      id: '05',
+      video: 'car-delivery-5.mp4'
+    }
+  ],
 
   stories: {
     Weddings: {
@@ -66,18 +54,18 @@ const ASSET_CONFIG = {
 };
 
 
-/* ==========================================================
-   CONTACT
-========================================================== */
+/* =========================================================
+   CONTACT / WHATSAPP
+========================================================= */
+
+const menuToggle = document.querySelector('.menu-toggle');
+const mainNav = document.querySelector('.main-nav');
 
 const WHATSAPP_NUMBER = '917699135521';
-
-const WHATSAPP_URL =
-  `https://wa.me/${WHATSAPP_NUMBER}`;
+const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 const FULL_PORTFOLIO_DRIVE_URL =
   'https://drive.google.com/drive/folders/1drHYXtt68WriUwYl-eWJwGoW9K8ONjWD';
-
 
 const NORMAL_WHATSAPP_MESSAGE = `Hello Ankit! 👋
 
@@ -89,7 +77,6 @@ Thank you!`;
 
 
 const openWhatsApp = (message) => {
-
   const url =
     `${WHATSAPP_URL}?text=${encodeURIComponent(message)}`;
 
@@ -101,41 +88,21 @@ const openWhatsApp = (message) => {
 };
 
 
-/* ==========================================================
-   ELEMENTS
-========================================================== */
-
-const menuToggle =
-  document.querySelector('.menu-toggle');
-
-const mainNav =
-  document.querySelector('.main-nav');
-
-const siteHeader =
-  document.querySelector('.site-header');
-
-
-/* ==========================================================
-   CONTACT BUTTON NORMALIZATION
-========================================================== */
+/* =========================================================
+   NORMALIZE CONTACT ACTIONS
+========================================================= */
 
 const normalizeContactActions = () => {
 
   const contactActions =
     document.querySelector('.contact-actions');
 
-
   const combinedAction =
-    contactActions?.querySelector(
-      'a[href^="tel:"]'
-    );
-
+    contactActions?.querySelector('a[href^="tel:"]');
 
   if (
     combinedAction &&
-    combinedAction.textContent.includes(
-      'WhatsApp / Call'
-    )
+    combinedAction.textContent.includes('WhatsApp / Call')
   ) {
 
     const whatsappAction =
@@ -156,10 +123,8 @@ const normalizeContactActions = () => {
     whatsappAction.innerHTML =
       'WhatsApp <span>↗</span>';
 
-
     combinedAction.textContent =
       'Call ';
-
 
     const arrow =
       document.createElement('span');
@@ -167,11 +132,7 @@ const normalizeContactActions = () => {
     arrow.textContent =
       '↗';
 
-
-    combinedAction.append(
-      arrow
-    );
-
+    combinedAction.append(arrow);
 
     contactActions.insertBefore(
       whatsappAction,
@@ -181,45 +142,31 @@ const normalizeContactActions = () => {
 
 
   const details =
-    document.querySelector(
-      '.contact-details'
-    );
-
+    document.querySelector('.contact-details');
 
   const combinedDetails =
     [
-      ...(details?.querySelectorAll(
-        'span'
-      ) || [])
+      ...(details?.querySelectorAll('span') || [])
     ].find(
       (item) =>
-        item.textContent.includes(
-          'WhatsApp / Call'
-        )
+        item.textContent.includes('WhatsApp / Call')
     );
 
 
   if (combinedDetails) {
 
     combinedDetails.outerHTML =
-      '<span>WHATSAPP <a class="whatsapp-link" href="https://wa.me/917699135521" target="_blank" rel="noreferrer">+91 7699135521 ↗</a></span>' +
-      '<span>CALL <a href="tel:+917699135521">+91 7699135521 ↗</a></span>';
+      '<span>WHATSAPP <a class="whatsapp-link" href="https://wa.me/917699135521" target="_blank" rel="noreferrer">+91 7699135521 ↗</a></span><span>CALL <a href="tel:+917699135521">+91 7699135521 ↗</a></span>';
   }
 
 
   const contactBookButton =
-    contactActions?.querySelector(
-      '.button'
-    );
-
+    contactActions?.querySelector('.button');
 
   if (contactBookButton) {
 
     contactBookButton.href =
-      '#contact';
-
-    contactBookButton.dataset.contactScroll =
-      'true';
+      '#enquiry-form';
   }
 };
 
@@ -227,203 +174,67 @@ const normalizeContactActions = () => {
 normalizeContactActions();
 
 
-/* ==========================================================
+/* =========================================================
    PORTFOLIO
-========================================================== */
+========================================================= */
 
 const portfolioLink =
-  document.querySelector(
-    '.portfolio-cta-link'
-  );
-
+  document.querySelector('.portfolio-cta-link');
 
 if (portfolioLink) {
 
   portfolioLink.href =
     FULL_PORTFOLIO_DRIVE_URL;
+
+  portfolioLink.target =
+    '_blank';
+
+  portfolioLink.rel =
+    'noopener noreferrer';
 }
 
 
-/* ==========================================================
+/* =========================================================
    WHATSAPP LINKS
-========================================================== */
+========================================================= */
 
 document
-  .querySelectorAll(
-    'a[href^="https://wa.me/"]'
-  )
-  .forEach(
-    (link) => {
+  .querySelectorAll('a[href^="https://wa.me/"]')
+  .forEach((link) => {
 
-      if (
-        link.dataset.whatsappBound ===
-        'true'
-      ) {
-        return;
+    if (
+      link.dataset.whatsappBound === 'true'
+    ) {
+      return;
+    }
+
+    link.dataset.whatsappBound =
+      'true';
+
+    link.addEventListener(
+      'click',
+      (event) => {
+
+        event.preventDefault();
+
+        openWhatsApp(
+          NORMAL_WHATSAPP_MESSAGE
+        );
       }
-
-
-      link.dataset.whatsappBound =
-        'true';
-
-
-      link.addEventListener(
-        'click',
-        (event) => {
-
-          event.preventDefault();
-
-
-          openWhatsApp(
-            NORMAL_WHATSAPP_MESSAGE
-          );
-        }
-      );
-    }
-  );
-
-
-/* ==========================================================
-   TOP / CONTACT SMOOTH SCROLL
-========================================================== */
-
-const scrollToTop = () => {
-
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-
-};
-
-
-const scrollToContact = () => {
-
-  const contactSection =
-    document.querySelector(
-      '#contact'
     );
-
-
-  if (!contactSection) {
-    return;
-  }
-
-
-  const headerHeight =
-    siteHeader?.offsetHeight ||
-    88;
-
-
-  const targetPosition =
-    contactSection.getBoundingClientRect().top +
-    window.scrollY -
-    headerHeight;
-
-
-  window.scrollTo({
-
-    top:
-      Math.max(
-        0,
-        targetPosition
-      ),
-
-    behavior:
-      'smooth'
   });
-};
 
 
-/* ==========================================================
-   BOOK A SHOOT
-========================================================== */
-
-document
-  .querySelectorAll(
-    '[data-contact-scroll="true"]'
-  )
-  .forEach(
-    (button) => {
-
-      button.addEventListener(
-        'click',
-        (event) => {
-
-          event.preventDefault();
-
-
-          scrollToContact();
-
-
-          /*
-           * Remove #contact from URL
-           * so the browser does not create
-           * another jump.
-           */
-
-          history.replaceState(
-            null,
-            '',
-            window.location.pathname +
-            window.location.search
-          );
-        }
-      );
-    }
-  );
-
-
-/* ==========================================================
-   BACK TO TOP
-========================================================== */
-
-document
-  .querySelectorAll(
-    'a[href="#top"]'
-  )
-  .forEach(
-    (topLink) => {
-
-      topLink.addEventListener(
-        'click',
-        (event) => {
-
-          event.preventDefault();
-
-
-          scrollToTop();
-
-
-          /*
-           * Keep the URL clean.
-           */
-
-          history.replaceState(
-            null,
-            '',
-            window.location.pathname +
-            window.location.search
-          );
-        }
-      );
-    }
-  );
-
-
-/* ==========================================================
-   MOBILE NAV
-========================================================== */
+/* =========================================================
+   MOBILE MENU
+========================================================= */
 
 menuToggle?.addEventListener(
   'click',
   () => {
 
     const isOpen =
-      mainNav.classList.toggle(
-        'is-open'
-      );
-
+      mainNav.classList.toggle('is-open');
 
     menuToggle.setAttribute(
       'aria-expanded',
@@ -434,47 +245,46 @@ menuToggle?.addEventListener(
 
 
 document
-  .querySelectorAll(
-    '.main-nav a'
-  )
-  .forEach(
-    (link) => {
+  .querySelectorAll('.main-nav a')
+  .forEach((link) => {
 
-      link.addEventListener(
-        'click',
-        () => {
+    link.addEventListener(
+      'click',
+      () => {
 
-          mainNav.classList.remove(
-            'is-open'
-          );
+        mainNav.classList.remove(
+          'is-open'
+        );
 
-
-          menuToggle?.setAttribute(
-            'aria-expanded',
-            'false'
-          );
-        }
-      );
-    }
-  );
+        menuToggle?.setAttribute(
+          'aria-expanded',
+          'false'
+        );
+      }
+    );
+  });
 
 
-/* ==========================================================
-   NAVIGATION / ACTIVE SECTION
-========================================================== */
+/* =========================================================
+   HEADER / NAVIGATION
+========================================================= */
 
-const navSections = [
-  ...document.querySelectorAll(
-    'main > section[id]'
-  )
-];
+const siteHeader =
+  document.querySelector('.site-header');
 
+const navSections =
+  [
+    ...document.querySelectorAll(
+      'main > section[id]'
+    )
+  ];
 
-const navLinks = [
-  ...document.querySelectorAll(
-    '.main-nav a[href^="#"]'
-  )
-];
+const navLinks =
+  [
+    ...document.querySelectorAll(
+      '.main-nav a[href^="#"]'
+    )
+  ];
 
 
 const updateNavigation = () => {
@@ -493,29 +303,24 @@ const updateNavigation = () => {
           window.scrollY + 160 >=
           section.offsetTop
         ) {
-
           return section.id;
         }
 
-
         return current;
+
       },
       'work'
     );
 
 
-  navLinks.forEach(
-    (link) => {
+  navLinks.forEach((link) => {
 
-      link.classList.toggle(
-        'is-active',
-        link.getAttribute(
-          'href'
-        ) ===
+    link.classList.toggle(
+      'is-active',
+      link.getAttribute('href') ===
         `#${currentSection}`
-      );
-    }
-  );
+    );
+  });
 };
 
 
@@ -531,32 +336,28 @@ window.addEventListener(
 );
 
 
-/* ==========================================================
+/* =========================================================
    REVEAL ANIMATIONS
-========================================================== */
+========================================================= */
 
 const revealObserver =
   new IntersectionObserver(
     (entries) => {
 
-      entries.forEach(
-        (entry) => {
+      entries.forEach((entry) => {
 
-          if (
-            entry.isIntersecting
-          ) {
+        if (entry.isIntersecting) {
 
-            entry.target.classList.add(
-              'is-visible'
-            );
+          entry.target.classList.add(
+            'is-visible'
+          );
 
-
-            revealObserver.unobserve(
-              entry.target
-            );
-          }
+          revealObserver.unobserve(
+            entry.target
+          );
         }
-      );
+      });
+
     },
     {
       threshold: 0.12
@@ -565,27 +366,20 @@ const revealObserver =
 
 
 document
-  .querySelectorAll(
-    '.reveal'
-  )
-  .forEach(
-    (element) => {
+  .querySelectorAll('.reveal')
+  .forEach((element) => {
 
-      revealObserver.observe(
-        element
-      );
-    }
-  );
+    revealObserver.observe(element);
+  });
 
 
-/* ==========================================================
+/* =========================================================
    STORIES
-========================================================== */
+========================================================= */
 
 const stories = {
 
   Weddings: {
-
     image:
       ASSET_CONFIG.stories.Weddings.image,
 
@@ -598,7 +392,6 @@ const stories = {
 
 
   Celebrations: {
-
     image:
       ASSET_CONFIG.stories.Celebrations.image,
 
@@ -611,7 +404,6 @@ const stories = {
 
 
   Events: {
-
     image:
       ASSET_CONFIG.stories.Events.image,
 
@@ -626,16 +418,10 @@ const stories = {
 
 
 const storyImage =
-  document.querySelector(
-    '#story-image'
-  );
-
+  document.querySelector('#story-image');
 
 const storyLabel =
-  document.querySelector(
-    '#story-label'
-  );
-
+  document.querySelector('#story-label');
 
 const storyDescription =
   document.querySelector(
@@ -643,25 +429,23 @@ const storyDescription =
   );
 
 
-/* ==========================================================
-   IMAGE HELPERS
-========================================================== */
+/* =========================================================
+   ASSET HELPERS
+========================================================= */
 
-const assetExists = async (
-  source
-) => {
+const assetExists = async (source) => {
 
   if (!source) {
     return false;
   }
 
-
+  /*
+   * External URLs are assumed to exist.
+   */
   if (
-    !source.startsWith(
-      'assets/'
-    )
+    source.startsWith('http://') ||
+    source.startsWith('https://')
   ) {
-
     return true;
   }
 
@@ -676,7 +460,6 @@ const assetExists = async (
         }
       );
 
-
     return response.ok;
 
   } catch {
@@ -686,41 +469,42 @@ const assetExists = async (
 };
 
 
-const setImageSource = async (
-  image,
-  source
-) => {
+const setImageSource =
+  async (image, source) => {
 
-  if (!image || !source) {
-    return;
-  }
+    if (!image || !source) {
+      return;
+    }
 
 
-  if (
-    !(await assetExists(source))
-  ) {
-
-    return;
-  }
-
-
-  image.src =
-    source;
+    /*
+     * For local GitHub files,
+     * test the file first.
+     */
+    const exists =
+      await assetExists(source);
 
 
-  image
-    .closest(
+    if (!exists) {
+      return;
+    }
+
+
+    image.src =
+      source;
+
+
+    image.closest(
       '.hero-asset-slot, .about-asset-slot'
-    )
-    ?.classList.remove(
+    )?.classList.remove(
       'asset-missing'
     );
-};
+  };
 
 
-/* ==========================================================
-   HERO / ABOUT
-========================================================== */
+/* =========================================================
+   HERO / ABOUT IMAGES
+========================================================= */
 
 setImageSource(
   document.querySelector(
@@ -744,769 +528,435 @@ setImageSource(
 );
 
 
-/* ==========================================================
+/* =========================================================
    FEATURED FILMS
-========================================================== */
+========================================================= */
 
-const filmItems = [
-  ...document.querySelectorAll(
+const filmItems =
+  document.querySelectorAll(
     '.film-item'
-  )
-];
-
-
-let activeFilm =
-  null;
-
-
-/* ==========================================================
-   STOP OTHER FILMS
-========================================================== */
-
-const stopOtherFilmPreviews = (
-  exceptVideo = null
-) => {
-
-  filmItems.forEach(
-    (film) => {
-
-      const video =
-        film.querySelector(
-          '.film-preview'
-        );
-
-
-      if (
-        !video ||
-        video === exceptVideo
-      ) {
-
-        return;
-      }
-
-
-      video.pause();
-
-
-      video.classList.remove(
-        'is-playing'
-      );
-
-
-      film
-        .querySelector(
-          '.film-poster-slot'
-        )
-        ?.classList.remove(
-          'has-video'
-        );
-    }
   );
-};
 
 
-/* ==========================================================
-   PREPARE FILMS
-========================================================== */
+/*
+ * IMPORTANT:
+ * Never hide the video initially.
+ * This makes the first frame visible
+ * even before the cursor enters.
+ */
+
+document
+  .querySelectorAll('.film-preview')
+  .forEach((video) => {
+
+    video.style.opacity =
+      '1';
+
+    video.muted =
+      true;
+
+    video.defaultMuted =
+      true;
+
+    video.playsInline =
+      true;
+
+    video.setAttribute(
+      'muted',
+      ''
+    );
+
+    video.setAttribute(
+      'playsinline',
+      ''
+    );
+
+    video.preload =
+      'metadata';
+  });
+
 
 filmItems.forEach((film) => {
 
-  const asset = ASSET_CONFIG.films.find(
-    (item) => item.id === film.dataset.film
-  );
+  const asset =
+    ASSET_CONFIG.films.find(
+      (item) =>
+        item.id ===
+        film.dataset.film
+    );
 
-  const preview = film.querySelector('.film-preview');
 
-  if (!asset || !preview) {
+  const preview =
+    film.querySelector(
+      '.film-preview'
+    );
+
+
+  const posterSlot =
+    film.querySelector(
+      '.film-poster-slot'
+    );
+
+
+  if (
+    !asset ||
+    !preview
+  ) {
     return;
   }
 
-  film.dataset.video = asset.video;
 
-  preview.src = asset.video;
-  preview.muted = true;
-  preview.loop = true;
-  preview.playsInline = true;
-
-  // IMPORTANT:
-  // Load the video immediately so the FIRST FRAME
-  // is visible before the mouse enters the card.
-  preview.preload = 'auto';
-  preview.load();
-
-  preview.addEventListener('loadeddata', () => {
-
-    const posterSlot =
-      film.querySelector('.film-poster-slot');
-
-    posterSlot?.classList.add('has-video');
-
-    // Keep the first frame visible.
-    preview.pause();
-
-    try {
-      preview.currentTime = 0;
-    } catch {}
-
-  }, { once: true });
-
-  preview.addEventListener('error', () => {
-
-    film
-      .querySelector('.film-poster-slot')
-      ?.classList.add('video-error');
-
-  }, { once: true });
-
-});
-/* ==========================================================
-   LOAD FILM VIDEO
-========================================================== */
-
-const loadFilmVideo = (
-  video
-) => {
-
-  return new Promise(
-    (resolve) => {
-
-      if (
-        !video ||
-        !video.dataset.src
-      ) {
-
-        resolve(false);
-
-        return;
-      }
+  /* Save video path for modal */
+  film.dataset.video =
+    asset.video || '';
 
 
-      if (
-        video.getAttribute(
-          'src'
-        )
-      ) {
+  /*
+   * Browser-safe muted video.
+   */
+  preview.muted =
+    true;
 
-        resolve(true);
+  preview.defaultMuted =
+    true;
 
-        return;
-      }
+  preview.playsInline =
+    true;
 
+  preview.setAttribute(
+    'muted',
+    ''
+  );
 
-      const finishLoading =
-        () => {
+  preview.setAttribute(
+    'playsinline',
+    ''
+  );
 
-          video.removeEventListener(
-            'loadeddata',
-            finishLoading
-          );
-
-
-          video.removeEventListener(
-            'error',
-            failLoading
-          );
-
-
-          resolve(true);
-        };
+  preview.preload =
+    'metadata';
 
 
-      const failLoading =
-        () => {
+  /*
+   * Set the actual GitHub video.
+   */
+  if (asset.video) {
 
-          video.removeEventListener(
-            'loadeddata',
-            finishLoading
-          );
+    preview.src =
+      asset.video;
 
-
-          video.removeEventListener(
-            'error',
-            failLoading
-          );
+    preview.load();
+  }
 
 
-          resolve(false);
-        };
+  /*
+   * When first frame is decoded,
+   * keep it visible.
+   */
+  preview.addEventListener(
+    'loadeddata',
+    () => {
 
-
-      video.addEventListener(
-        'loadeddata',
-        finishLoading
+      posterSlot?.classList.add(
+        'has-video'
       );
 
+      preview.style.opacity =
+        '1';
 
-      video.addEventListener(
-        'error',
-        failLoading
-      );
-
-
-      video.src =
-        video.dataset.src;
-
-
-      video.load();
+    },
+    {
+      once: true
     }
   );
-};
 
 
-/* ==========================================================
-   PLAY FILM PREVIEW
-========================================================== */
+  /*
+   * If a video fails,
+   * show the fallback state.
+   */
+  preview.addEventListener(
+    'error',
+    () => {
 
-const playFilmPreview = async (
-  film
-) => {
+      posterSlot?.classList.add(
+        'video-error'
+      );
 
-  const video =
-    film?.querySelector(
-      '.film-preview'
-    );
+      preview.style.opacity =
+        '0';
 
-
-  if (!video) {
-    return;
-  }
-
-
-  stopOtherFilmPreviews(
-    video
+    },
+    {
+      once: true
+    }
   );
 
 
-  activeFilm =
-    film;
-
-
-  const loaded =
-    await loadFilmVideo(
-      video
-    );
-
-
-  if (
-    activeFilm !== film
-  ) {
-
-    return;
-  }
-
-
-  if (!loaded) {
-    return;
-  }
-
-
-  film
-    .querySelector(
-      '.film-poster-slot'
-    )
-    ?.classList.add(
-      'has-video'
-    );
-
-
-  try {
-
-    await video.play();
-
-  } catch {
-
-    /* autoplay may fail silently */
-
-  }
-};
-
-
-/* ==========================================================
-   PAUSE FILM PREVIEW
-========================================================== */
-
-const pauseFilmPreview = (
-  film
-) => {
-
-  const video =
-    film?.querySelector(
-      '.film-preview'
-    );
-
-
-  if (!video) {
-    return;
-  }
-
-
-  video.pause();
-
-
-  try {
-
-    video.currentTime =
-      0;
-
-  } catch {}
-
-
-  film
-    .querySelector(
-      '.film-poster-slot'
-    )
-    ?.classList.remove(
-      'has-video'
-    );
-
-
-  if (
-    activeFilm === film
-  ) {
-
-    activeFilm =
-      null;
-  }
-};
-
-
-/* ==========================================================
-   DESKTOP HOVER
-========================================================== */
-
-filmItems.forEach(
-  (film) => {
-
-    film.addEventListener(
-      'mouseenter',
-      () => {
-
-        if (
-          window.matchMedia(
-            '(hover: hover)'
-          ).matches
-        ) {
-
-          playFilmPreview(
-            film
-          );
-        }
-      }
-    );
-
-
-    film.addEventListener(
-      'mouseleave',
-      () => {
-
-        if (
-          window.matchMedia(
-            '(hover: hover)'
-          ).matches
-        ) {
-
-          pauseFilmPreview(
-            film
-          );
-        }
-      }
-    );
-  }
-);
-
-
-/* ==========================================================
-   MOBILE FILM AUTOPLAY
-========================================================== */
-
-let mobileActiveFilm =
-  null;
-
-
-const chooseMobileFilm = () => {
-
-  if (
+  /*
+   * Desktop hover detection.
+   */
+  const canHover =
     window.matchMedia(
-      '(hover: hover)'
-    ).matches
-  ) {
-
-    return;
-  }
+      '(hover: hover) and (pointer: fine)'
+    ).matches;
 
 
-  let bestFilm =
-    null;
+  if (canHover) {
 
 
-  let bestDistance =
-    Infinity;
-
-
-  filmItems.forEach(
-    (film) => {
-
-      const rect =
-        film.getBoundingClientRect();
-
-
-      const viewportCenter =
-        window.innerHeight /
-        2;
-
-
-      const filmCenter =
-        rect.top +
-        rect.height /
-        2;
-
-
-      const distance =
-        Math.abs(
-          filmCenter -
-          viewportCenter
-        );
-
-
-      const visibleTop =
-        Math.max(
-          rect.top,
-          0
-        );
-
-
-      const visibleBottom =
-        Math.min(
-          rect.bottom,
-          window.innerHeight
-        );
-
-
-      const visibleHeight =
-        Math.max(
-          0,
-          visibleBottom -
-          visibleTop
-        );
-
-
-      const visibility =
-        rect.height > 0
-          ? visibleHeight /
-            rect.height
-          : 0;
-
-
-      if (
-        visibility >= 0.35 &&
-        distance < bestDistance
-      ) {
-
-        bestDistance =
-          distance;
-
-
-        bestFilm =
-          film;
-      }
-    }
-  );
-
-
-  if (
-    bestFilm &&
-    bestFilm !==
-      mobileActiveFilm
-  ) {
-
-    if (
-      mobileActiveFilm
-    ) {
-
-      pauseFilmPreview(
-        mobileActiveFilm
-      );
-    }
-
-
-    mobileActiveFilm =
-      bestFilm;
-
-
-    playFilmPreview(
-      bestFilm
-    );
-  }
-};
-
-
-let mobileFilmTicking =
-  false;
-
-
-const handleMobileFilmScroll =
-  () => {
-
-    if (
-      mobileFilmTicking
-    ) {
-
-      return;
-    }
-
-
-    mobileFilmTicking =
-      true;
-
-
-    requestAnimationFrame(
+    /*
+     * CURSOR ENTER
+     *
+     * Video starts playing.
+     */
+    film.addEventListener(
+      'pointerenter',
       () => {
 
-        chooseMobileFilm();
+        if (!preview.src) {
+          return;
+        }
 
 
-        mobileFilmTicking =
-          false;
+        preview.muted =
+          true;
+
+
+        preview.play().catch(
+          () => {}
+        );
       }
     );
-  };
 
 
-window.addEventListener(
-  'scroll',
-  handleMobileFilmScroll,
-  {
-    passive: true
+    /*
+     * CURSOR LEAVE
+     *
+     * Pause video.
+     * Return to first frame.
+     */
+    film.addEventListener(
+      'pointerleave',
+      () => {
+
+        preview.pause();
+
+
+        try {
+
+          preview.currentTime =
+            0;
+
+        } catch {
+
+          /*
+           * Browser may not yet
+           * have enough media data.
+           */
+        }
+      }
+    );
   }
-);
+});
 
 
-window.addEventListener(
-  'resize',
-  handleMobileFilmScroll,
-  {
-    passive: true
-  }
-);
-
-
-window.addEventListener(
-  'orientationchange',
-  handleMobileFilmScroll,
-  {
-    passive: true
-  }
-);
-
-
-/* ==========================================================
+/* =========================================================
    STORY TABS
-========================================================== */
+========================================================= */
 
 document
-  .querySelectorAll(
-    '.story-tab'
-  )
-  .forEach(
-    (tab) => {
+  .querySelectorAll('.story-tab')
+  .forEach((tab) => {
 
-      tab.addEventListener(
-        'click',
-        () => {
+    tab.addEventListener(
+      'click',
+      () => {
 
-          const story =
-            stories[
-              tab.dataset.story
-            ];
+        const story =
+          stories[
+            tab.dataset.story
+          ];
 
 
-          if (!story) {
-            return;
-          }
+        if (!story) {
+          return;
+        }
 
 
-          document
-            .querySelector(
-              '.story-tab.is-active'
-            )
-            ?.classList.remove(
-              'is-active'
-            );
-
-
-          tab.classList.add(
+        document
+          .querySelector(
+            '.story-tab.is-active'
+          )
+          ?.classList.remove(
             'is-active'
           );
 
 
-          tab.setAttribute(
+        document
+          .querySelector(
+            '.story-tab[aria-selected="true"]'
+          )
+          ?.setAttribute(
             'aria-selected',
-            'true'
+            'false'
           );
 
 
-          if (storyImage) {
+        tab.classList.add(
+          'is-active'
+        );
+
+
+        tab.setAttribute(
+          'aria-selected',
+          'true'
+        );
+
+
+        if (storyImage) {
+
+          storyImage.style.opacity =
+            '0';
+        }
+
+
+        window.setTimeout(
+          () => {
+
+            if (!storyImage) {
+              return;
+            }
+
+
+            storyImage.src =
+              story.image;
+
+
+            storyImage.alt =
+              `${storyLabel?.textContent || ''} story`;
+
+
+            if (storyLabel) {
+
+              storyLabel.textContent =
+                story.label;
+            }
+
+
+            if (storyDescription) {
+
+              storyDescription.textContent =
+                story.description;
+            }
+
 
             storyImage.style.opacity =
-              '0';
-          }
+              '1';
+
+          },
+          180
+        );
+      }
+    );
+  });
 
 
-          window.setTimeout(
-            () => {
-
-              if (
-                storyImage
-              ) {
-
-                storyImage.src =
-                  story.image;
-
-
-                storyImage.alt =
-                  `${story.label} story`;
-              }
-
-
-              if (
-                storyLabel
-              ) {
-
-                storyLabel.textContent =
-                  story.label;
-              }
-
-
-              if (
-                storyDescription
-              ) {
-
-                storyDescription.textContent =
-                  story.description;
-              }
-
-
-              if (
-                storyImage
-              ) {
-
-                storyImage.style.opacity =
-                  '1';
-              }
-
-            },
-            180
-          );
-        }
-      );
-    }
-  );
-
-
-/* ==========================================================
-   PLAY BUTTONS
-========================================================== */
+/* =========================================================
+   PLAY BUTTON
+========================================================= */
 
 document
-  .querySelectorAll(
-    '.play-button'
-  )
-  .forEach(
-    (button) => {
+  .querySelectorAll('.play-button')
+  .forEach((button) => {
 
-      button.addEventListener(
-        'click',
-        (event) => {
+
+    button.addEventListener(
+      'click',
+      (event) => {
+
+        event.preventDefault();
+
+        button.classList.toggle(
+          'is-playing'
+        );
+
+
+        const icon =
+          button.querySelector(
+            'span'
+          );
+
+
+        if (icon) {
+
+          icon.textContent =
+            button.classList.contains(
+              'is-playing'
+            )
+              ? 'Ⅱ'
+              : '▶';
+        }
+      }
+    );
+
+
+    button.addEventListener(
+      'keydown',
+      (event) => {
+
+        if (
+          event.key === 'Enter' ||
+          event.key === ' '
+        ) {
 
           event.preventDefault();
 
-          event.stopPropagation();
-
-
-          button.classList.toggle(
-            'is-playing'
-          );
-
-
-          const span =
-            button.querySelector(
-              'span'
-            );
-
-
-          if (span) {
-
-            span.textContent =
-              button.classList.contains(
-                'is-playing'
-              )
-                ? 'Ⅱ'
-                : '▶';
-          }
+          button.click();
         }
-      );
+      }
+    );
+  });
 
 
-      button.addEventListener(
-        'keydown',
-        (event) => {
-
-          if (
-            event.key ===
-              'Enter' ||
-            event.key ===
-              ' '
-          ) {
-
-            event.preventDefault();
-
-            button.click();
-          }
-        }
-      );
-    }
-  );
-
-
-/* ==========================================================
+/* =========================================================
    FILM MODAL
-========================================================== */
+========================================================= */
 
 const filmModal =
   document.querySelector(
     '#film-modal'
   );
 
-
 const filmPlayer =
   document.querySelector(
     '.film-player'
   );
-
 
 const filmModalTitle =
   document.querySelector(
     '#film-modal-title'
   );
 
-
 const filmModalCategory =
   document.querySelector(
     '.film-modal-category'
   );
-
 
 const filmModalEmpty =
   document.querySelector(
     '.film-modal-empty'
   );
 
-
 const filmModalClose =
   document.querySelector(
     '.film-modal-close'
   );
 
+
+/* =========================================================
+   CLOSE MODAL
+========================================================= */
 
 const closeFilmModal = () => {
 
@@ -1530,182 +980,149 @@ const closeFilmModal = () => {
 
     filmPlayer.pause();
 
-
     filmPlayer.removeAttribute(
       'src'
     );
 
-
     filmPlayer.load();
-
-
-    filmPlayer.hidden =
-      false;
-  }
-
-
-  if (filmModalEmpty) {
-
-    filmModalEmpty.hidden =
-      true;
   }
 };
 
 
-/* ==========================================================
+/* =========================================================
    OPEN FILM MODAL
-========================================================== */
+========================================================= */
 
 document
-  .querySelectorAll(
-    '.film-item'
-  )
-  .forEach(
-    (film) => {
+  .querySelectorAll('.film-item')
+  .forEach((film) => {
 
-      film
-        .querySelector(
-          '.film-visual'
-        )
-        ?.addEventListener(
-          'click',
-          async (event) => {
+    film
+      .querySelector('.film-visual')
+      ?.addEventListener(
+        'click',
+        (event) => {
 
-            event.preventDefault();
+          event.preventDefault();
 
 
-            const title =
-              film.querySelector(
-                'h3'
-              )?.textContent ||
-              'Selected film';
+          const title =
+            film.querySelector(
+              'h3'
+            )?.textContent ||
+            'Selected film';
 
 
-            const category =
-              film.querySelector(
-                '.film-meta p'
-              )?.textContent ||
-              'Selected film';
+          const category =
+            film.querySelector(
+              '.film-meta p'
+            )?.textContent ||
+            'Selected film';
 
 
-            const videoSource =
-              film.dataset.video?.trim();
+          const videoSource =
+            film.dataset.video?.trim();
 
 
-            if (
-              filmModalTitle
-            ) {
+          if (filmModalTitle) {
 
-              filmModalTitle.textContent =
-                title;
+            filmModalTitle.textContent =
+              title;
+          }
+
+
+          if (filmModalCategory) {
+
+            filmModalCategory.textContent =
+              `Memoreels / ${category}`;
+          }
+
+
+          filmModal?.classList.add(
+            'is-open'
+          );
+
+
+          filmModal?.setAttribute(
+            'aria-hidden',
+            'false'
+          );
+
+
+          document.body.classList.add(
+            'modal-open'
+          );
+
+
+          if (
+            videoSource &&
+            filmPlayer
+          ) {
+
+            filmPlayer.src =
+              videoSource;
+
+            filmPlayer.hidden =
+              false;
+
+
+            if (filmModalEmpty) {
+
+              filmModalEmpty.hidden =
+                true;
             }
 
 
-            if (
-              filmModalCategory
-            ) {
+            filmPlayer
+              .play()
+              .catch(
+                () => {}
+              );
 
-              filmModalCategory.textContent =
-                `Memoreels / ${category}`;
-            }
+          } else {
 
-
-            filmModal?.classList.add(
-              'is-open'
-            );
-
-
-            filmModal?.setAttribute(
-              'aria-hidden',
-              'false'
-            );
-
-
-            document.body.classList.add(
-              'modal-open'
-            );
-
-
-            if (
-              videoSource &&
-              filmPlayer
-            ) {
-
-              filmPlayer.src =
-                videoSource;
-
+            if (filmPlayer) {
 
               filmPlayer.hidden =
+                true;
+            }
+
+
+            if (filmModalEmpty) {
+
+              filmModalEmpty.hidden =
                 false;
 
 
-              if (
-                filmModalEmpty
-              ) {
-
-                filmModalEmpty.hidden =
-                  true;
-              }
-
-
-              try {
-
-                await filmPlayer.play();
-
-              } catch {
-
-                /* manual play remains available */
-              }
-
-            } else {
-
-              if (
-                filmPlayer
-              ) {
-
-                filmPlayer.hidden =
-                  true;
-              }
-
-
-              if (
-                filmModalEmpty
-              ) {
-
-                filmModalEmpty.hidden =
-                  false;
-
-
-                filmModalEmpty.textContent =
-                  'This film is reserved for a future Memoreels release.';
-              }
+              filmModalEmpty.textContent =
+                film.dataset.film === '01'
+                  ? 'The Beginning will be available here once the final film is connected.'
+                  : 'This film is reserved for a future Memoreels release.';
             }
-
-
-            filmModalClose?.focus();
           }
-        );
-    }
-  );
 
 
-/* ==========================================================
-   MODAL CLOSE
-========================================================== */
+          filmModalClose?.focus();
+        }
+      );
+  });
+
+
+/* =========================================================
+   MODAL CLOSE CONTROLS
+========================================================= */
 
 document
   .querySelectorAll(
     '[data-modal-close]'
   )
-  .forEach(
-    (control) => {
+  .forEach((control) => {
 
-      control.addEventListener(
-        'click',
-        closeFilmModal
-      );
-    }
-  );
+    control.addEventListener(
+      'click',
+      closeFilmModal
+    );
+  });
 
 
 document.addEventListener(
@@ -1713,8 +1130,7 @@ document.addEventListener(
   (event) => {
 
     if (
-      event.key ===
-        'Escape' &&
+      event.key === 'Escape' &&
       filmModal?.classList.contains(
         'is-open'
       )
@@ -1726,43 +1142,40 @@ document.addEventListener(
 );
 
 
-/* ==========================================================
-   ASSET ERROR HANDLING
-========================================================== */
+/* =========================================================
+   IMAGE ERROR HANDLING
+========================================================= */
 
 document
   .querySelectorAll(
     '[data-asset-src]'
   )
-  .forEach(
-    (asset) => {
+  .forEach((asset) => {
 
-      asset.addEventListener(
-        'error',
-        () => {
+    asset.addEventListener(
+      'error',
+      () => {
 
-          asset
-            .closest(
-              '.hero-asset-slot, .about-asset-slot'
-            )
-            ?.classList.add(
-              'asset-missing'
-            );
-        }
-      );
-    }
-  );
+        asset
+          .closest(
+            '.hero-asset-slot, .about-asset-slot'
+          )
+          ?.classList.add(
+            'asset-missing'
+          );
+      }
+    );
+  });
 
 
-/* ==========================================================
+/* =========================================================
    ENQUIRY FORM
-========================================================== */
+========================================================= */
 
 const enquiryForm =
   document.querySelector(
     '#enquiry-form'
   );
-
 
 const formStatus =
   document.querySelector(
@@ -1786,9 +1199,7 @@ enquiryForm?.addEventListener(
       );
 
 
-      if (
-        formStatus
-      ) {
+      if (formStatus) {
 
         formStatus.textContent =
           'Please add your name, phone number and event type to continue.';
@@ -1796,9 +1207,7 @@ enquiryForm?.addEventListener(
 
 
       enquiryForm
-        .querySelector(
-          ':invalid'
-        )
+        .querySelector(':invalid')
         ?.focus();
 
 
@@ -1839,9 +1248,7 @@ I would love to discuss the availability, requirements and suitable package with
 Thank you!`;
 
 
-    if (
-      formStatus
-    ) {
+    if (formStatus) {
 
       formStatus.textContent =
         'Opening WhatsApp…';
@@ -1855,9 +1262,9 @@ Thank you!`;
 );
 
 
-/* ==========================================================
+/* =========================================================
    HERO PARALLAX
-========================================================== */
+========================================================= */
 
 const heroMedia =
   document.querySelector(
@@ -1883,18 +1290,5 @@ window.addEventListener(
   },
   {
     passive: true
-  }
-);
-
-
-/* ==========================================================
-   INITIAL MOBILE FILM CHECK
-========================================================== */
-
-window.addEventListener(
-  'load',
-  () => {
-
-    chooseMobileFilm();
   }
 );
