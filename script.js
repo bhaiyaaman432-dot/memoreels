@@ -7,16 +7,14 @@ const ASSET_CONFIG = {
   hero: {
     image: ''
   },
-
   about: {
     image: 'images/Untitled.jpg'
   },
-
   films: [
     {
       id: '01',
       video: 'wedding-film-compressed-25mb.mp4',
-      poster: 'images/poster-1.jpg'
+      poster: 'images/poster-1.jpg' 
     },
     {
       id: '02',
@@ -39,17 +37,10 @@ const ASSET_CONFIG = {
       poster: 'images/poster-5.jpg'
     }
   ],
-
   stories: {
-    Weddings: {
-      image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=85'
-    },
-    Celebrations: {
-      image: 'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=1000&q=85'
-    },
-    Events: {
-      image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1000&q=85'
-    }
+    Weddings: { image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=85' },
+    Celebrations: { image: 'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=1000&q=85' },
+    Events: { image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1000&q=85' }
   }
 };
 
@@ -57,7 +48,6 @@ const ASSET_CONFIG = {
 /* =========================================================
    CONTACT / WHATSAPP
 ========================================================= */
-
 const menuToggle = document.querySelector('.menu-toggle');
 const mainNav = document.querySelector('.main-nav');
 const WHATSAPP_NUMBER = '917699135521';
@@ -69,11 +59,6 @@ const openWhatsApp = (message) => {
   const url = `${WHATSAPP_URL}?text=${encodeURIComponent(message)}`;
   window.open(url, '_blank', 'noopener,noreferrer');
 };
-
-
-/* =========================================================
-   NORMALIZE CONTACT ACTIONS
-========================================================= */
 
 const normalizeContactActions = () => {
   const contactActions = document.querySelector('.contact-actions');
@@ -87,7 +72,6 @@ const normalizeContactActions = () => {
     whatsappAction.rel = 'noreferrer';
     whatsappAction.innerHTML = 'WhatsApp <span>↗</span>';
     combinedAction.textContent = 'Call ';
-    
     const arrow = document.createElement('span');
     arrow.textContent = '↗';
     combinedAction.append(arrow);
@@ -104,17 +88,9 @@ const normalizeContactActions = () => {
   }
 
   const contactBookButton = contactActions?.querySelector('.button');
-  if (contactBookButton) {
-    contactBookButton.href = '#enquiry-form';
-  }
+  if (contactBookButton) contactBookButton.href = '#enquiry-form';
 };
-
 normalizeContactActions();
-
-
-/* =========================================================
-   PORTFOLIO
-========================================================= */
 
 const portfolioLink = document.querySelector('.portfolio-cta-link');
 if (portfolioLink) {
@@ -122,11 +98,6 @@ if (portfolioLink) {
   portfolioLink.target = '_blank';
   portfolioLink.rel = 'noopener noreferrer';
 }
-
-
-/* =========================================================
-   WHATSAPP LINKS
-========================================================= */
 
 document.querySelectorAll('a[href^="https://wa.me/"]').forEach((link) => {
     if (link.dataset.whatsappBound === 'true') return;
@@ -136,11 +107,6 @@ document.querySelectorAll('a[href^="https://wa.me/"]').forEach((link) => {
         openWhatsApp(NORMAL_WHATSAPP_MESSAGE);
     });
 });
-
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
 
 menuToggle?.addEventListener('click', () => {
     const isOpen = mainNav.classList.toggle('is-open');
@@ -154,11 +120,6 @@ document.querySelectorAll('.main-nav a').forEach((link) => {
     });
 });
 
-
-/* =========================================================
-   HEADER / NAVIGATION
-========================================================= */
-
 const siteHeader = document.querySelector('.site-header');
 const navSections = [...document.querySelectorAll('main > section[id]')];
 const navLinks = [...document.querySelectorAll('.main-nav a[href^="#"]')];
@@ -169,19 +130,12 @@ const updateNavigation = () => {
         if (window.scrollY + 160 >= section.offsetTop) return section.id;
         return current;
       }, 'work');
-
   navLinks.forEach((link) => {
     link.classList.toggle('is-active', link.getAttribute('href') === `#${currentSection}`);
   });
 };
-
 updateNavigation();
 window.addEventListener('scroll', updateNavigation, { passive: true });
-
-
-/* =========================================================
-   REVEAL ANIMATIONS
-========================================================= */
 
 const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -196,11 +150,6 @@ document.querySelectorAll('.reveal').forEach((element) => {
     revealObserver.observe(element);
 });
 
-
-/* =========================================================
-   STORIES
-========================================================= */
-
 const stories = {
   Weddings: { image: ASSET_CONFIG.stories.Weddings.image, label: '01 / Weddings', description: 'Cinematic films, photography and reels for your day.' },
   Celebrations: { image: ASSET_CONFIG.stories.Celebrations.image, label: '02 / Celebrations', description: 'Birthdays, engagements and moments worth keeping.' },
@@ -211,34 +160,18 @@ const storyImage = document.querySelector('#story-image');
 const storyLabel = document.querySelector('#story-label');
 const storyDescription = document.querySelector('#story-description');
 
-
-/* =========================================================
-   ASSET HELPERS
-========================================================= */
-
 const assetExists = async (source) => {
   if (!source) return false;
   if (source.startsWith('http://') || source.startsWith('https://')) return true;
-  try {
-    const response = await fetch(source, { method: 'HEAD' });
-    return response.ok;
-  } catch {
-    return false;
-  }
+  try { return (await fetch(source, { method: 'HEAD' })).ok; } catch { return false; }
 };
 
 const setImageSource = async (image, source) => {
     if (!image || !source) return;
-    const exists = await assetExists(source);
-    if (!exists) return;
+    if (!(await assetExists(source))) return;
     image.src = source;
     image.closest('.hero-asset-slot, .about-asset-slot')?.classList.remove('asset-missing');
 };
-
-
-/* =========================================================
-   HERO / ABOUT IMAGES
-========================================================= */
 
 setImageSource(document.querySelector('#ankit-camera-image'), ASSET_CONFIG.hero.image);
 setImageSource(document.querySelector('#ankit-portrait-image'), ASSET_CONFIG.about.image);
@@ -246,20 +179,17 @@ setImageSource(storyImage, stories.Weddings.image);
 
 
 /* =========================================================
-   FEATURED FILMS - PERFECT POSTER IMPLEMENTATION
+   FEATURED FILMS - LAZY LOAD FIX (SUPER FAST)
 ========================================================= */
-
 const filmItems = document.querySelectorAll('.film-item');
 
 document.querySelectorAll('.film-preview').forEach((video) => {
-    // Video chupa rahega shuru mein
     video.style.opacity = '0'; 
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
-    video.setAttribute('muted', '');
-    video.setAttribute('playsinline', '');
-    video.preload = 'metadata'; 
+    // Preload hata diya taaki website atak na jaye
+    video.preload = 'none'; 
 });
 
 filmItems.forEach((film) => {
@@ -269,58 +199,51 @@ filmItems.forEach((film) => {
 
   if (!asset) return;
 
-  // Asli khel yahan hai: Poster image set kar do aur visible rakho
+  // Set initial poster image
   if (asset.poster && posterImg) {
     posterImg.src = asset.poster;
     posterImg.style.display = 'block';
+    
+    // ERROR FALLBACK: Agar image path galat hua toh error dikhega console mein
+    posterImg.onerror = () => console.error("Image load nahi hui! Path check karo:", asset.poster);
   }
 
   if (!preview) return;
-
-  // Video data set karo
   film.dataset.video = asset.video || '';
-  if (asset.video) {
-    preview.src = asset.video;
-  }
 
-  // Hover effect: Jab cursor aayega toh video dikhega aur play hoga
   const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   if (canHover) {
     film.addEventListener('pointerenter', () => {
-      if (!preview.src) return;
-      preview.style.opacity = '1'; // Video dikhao
+      // MAGIC FIX: Video ka data SIRF tab load hoga jab hover karoge!
+      if (!preview.getAttribute('src')) {
+        preview.setAttribute('src', asset.video);
+        preview.load();
+      }
+      preview.style.opacity = '1'; 
       preview.play().catch(() => {});
     });
 
     film.addEventListener('pointerleave', () => {
-      preview.style.opacity = '0'; // Wapas photo dikhao
+      preview.style.opacity = '0'; 
       preview.pause();
-      try {
-        preview.currentTime = 0;
-      } catch (e) {}
+      try { if (preview.readyState >= 2) preview.currentTime = 0; } catch (e) {}
     });
   }
 });
 
-
 /* =========================================================
-   STORY TABS
+   REST OF THE SCRIPT
 ========================================================= */
-
 document.querySelectorAll('.story-tab').forEach((tab) => {
     tab.addEventListener('click', () => {
         const story = stories[tab.dataset.story];
         if (!story) return;
-
         document.querySelector('.story-tab.is-active')?.classList.remove('is-active');
         document.querySelector('.story-tab[aria-selected="true"]')?.setAttribute('aria-selected', 'false');
-        
         tab.classList.add('is-active');
         tab.setAttribute('aria-selected', 'true');
-
         if (storyImage) storyImage.style.opacity = '0';
-
         window.setTimeout(() => {
             if (!storyImage) return;
             storyImage.src = story.image;
@@ -332,33 +255,17 @@ document.querySelectorAll('.story-tab').forEach((tab) => {
       });
   });
 
-
-/* =========================================================
-   PLAY BUTTON
-========================================================= */
-
 document.querySelectorAll('.play-button').forEach((button) => {
     button.addEventListener('click', (event) => {
         event.preventDefault();
         button.classList.toggle('is-playing');
         const icon = button.querySelector('span');
-        if (icon) {
-          icon.textContent = button.classList.contains('is-playing') ? 'Ⅱ' : '▶';
-        }
+        if (icon) icon.textContent = button.classList.contains('is-playing') ? 'Ⅱ' : '▶';
       });
-
     button.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          button.click();
-        }
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); button.click(); }
       });
   });
-
-
-/* =========================================================
-   FILM MODAL
-========================================================= */
 
 const filmModal = document.querySelector('#film-modal');
 const filmPlayer = document.querySelector('.film-player');
@@ -367,31 +274,16 @@ const filmModalCategory = document.querySelector('.film-modal-category');
 const filmModalEmpty = document.querySelector('.film-modal-empty');
 const filmModalClose = document.querySelector('.film-modal-close');
 
-
-/* =========================================================
-   CLOSE MODAL
-========================================================= */
-
 const closeFilmModal = () => {
   filmModal?.classList.remove('is-open');
   filmModal?.setAttribute('aria-hidden', 'true');
   document.body.classList.remove('modal-open');
-  if (filmPlayer) {
-    filmPlayer.pause();
-    filmPlayer.removeAttribute('src');
-    filmPlayer.load();
-  }
+  if (filmPlayer) { filmPlayer.pause(); filmPlayer.removeAttribute('src'); filmPlayer.load(); }
 };
-
-
-/* =========================================================
-   OPEN FILM MODAL
-========================================================= */
 
 document.querySelectorAll('.film-item').forEach((film) => {
     film.querySelector('.film-visual')?.addEventListener('click', (event) => {
           event.preventDefault();
-
           const title = film.querySelector('h3')?.textContent || 'Selected film';
           const category = film.querySelector('.film-meta p')?.textContent || 'Selected film';
           const videoSource = film.dataset.video?.trim();
@@ -412,76 +304,36 @@ document.querySelectorAll('.film-item').forEach((film) => {
             if (filmPlayer) filmPlayer.hidden = true;
             if (filmModalEmpty) {
               filmModalEmpty.hidden = false;
-              filmModalEmpty.textContent = film.dataset.film === '01'
-                  ? 'The Beginning will be available here once the final film is connected.'
-                  : 'This film is reserved for a future Memoreels release.';
+              filmModalEmpty.textContent = film.dataset.film === '01' ? 'The Beginning will be available here once the final film is connected.' : 'This film is reserved for a future Memoreels release.';
             }
           }
           filmModalClose?.focus();
         });
   });
 
-
-/* =========================================================
-   MODAL CLOSE CONTROLS
-========================================================= */
-
-document.querySelectorAll('[data-modal-close]').forEach((control) => {
-    control.addEventListener('click', closeFilmModal);
-  });
-
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && filmModal?.classList.contains('is-open')) {
-      closeFilmModal();
-    }
-  });
-
-
-/* =========================================================
-   IMAGE ERROR HANDLING
-========================================================= */
-
-document.querySelectorAll('[data-asset-src]').forEach((asset) => {
-    asset.addEventListener('error', () => {
-        asset.closest('.hero-asset-slot, .about-asset-slot')?.classList.add('asset-missing');
-      });
-  });
-
-
-/* =========================================================
-   ENQUIRY FORM
-========================================================= */
+document.querySelectorAll('[data-modal-close]').forEach((control) => { control.addEventListener('click', closeFilmModal); });
+document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && filmModal?.classList.contains('is-open')) closeFilmModal(); });
+document.querySelectorAll('[data-asset-src]').forEach((asset) => { asset.addEventListener('error', () => { asset.closest('.hero-asset-slot, .about-asset-slot')?.classList.add('asset-missing'); }); });
 
 const enquiryForm = document.querySelector('#enquiry-form');
 const formStatus = document.querySelector('.form-status');
 
 enquiryForm?.addEventListener('submit', (event) => {
     event.preventDefault();
-
     if (!enquiryForm.checkValidity()) {
       enquiryForm.classList.add('is-invalid');
       if (formStatus) formStatus.textContent = 'Please add your name, phone number and event type to continue.';
       enquiryForm.querySelector(':invalid')?.focus();
       return;
     }
-
     enquiryForm.classList.remove('is-invalid');
     const formData = new FormData(enquiryForm);
-
     const enquiryMessage = `Hello Ankit! 👋\n\nI would like to enquire about photography / films for my upcoming event.\n\nHere are my details:\n\nName: ${formData.get('name')}\nPhone / WhatsApp: ${formData.get('phone')}\nEmail: ${formData.get('email') || 'Not provided'}\nEvent Type: ${formData.get('eventType')}\nEvent Date: ${formData.get('eventDate') || 'Not provided'}\nLocation: ${formData.get('location') || 'Not provided'}\n\nA little about my story:\n${formData.get('story') || 'Not provided'}\n\nI would love to discuss the availability, requirements and suitable package with you.\n\nThank you!`;
-
     if (formStatus) formStatus.textContent = 'Opening WhatsApp…';
     openWhatsApp(enquiryMessage);
   });
 
-
-/* =========================================================
-   HERO PARALLAX
-========================================================= */
-
 const heroMedia = document.querySelector('.hero-media');
 window.addEventListener('scroll', () => {
-    if (window.innerWidth > 800 && heroMedia) {
-      heroMedia.style.transform = `translateY(${Math.min(window.scrollY * 0.08, 32)}px)`;
-    }
+    if (window.innerWidth > 800 && heroMedia) heroMedia.style.transform = `translateY(${Math.min(window.scrollY * 0.08, 32)}px)`;
   }, { passive: true });
