@@ -186,21 +186,6 @@ const filmItems =
   document.querySelectorAll('.film-item');
 
 
-/*
- * MEMOREELS FILM PREVIEW
- *
- * Normal state:
- *   Video ka apna first frame visible.
- *
- * Cursor enter:
- *   Video play.
- *
- * Cursor leave:
- *   Video pause + first frame.
- *
- * Poster JPG ki dependency nahi.
- */
-
 filmItems.forEach((film) => {
 
   const asset =
@@ -209,10 +194,8 @@ filmItems.forEach((film) => {
         item.id === film.dataset.film
     );
 
-
   const preview =
     film.querySelector('.film-preview');
-
 
   const posterImg =
     film.querySelector(
@@ -229,24 +212,15 @@ filmItems.forEach((film) => {
   }
 
 
-  /*
-   * Modal ke liye video path save.
-   */
+  /* Video path for modal */
   film.dataset.video =
     asset.video;
 
 
-  /*
-   * Video settings.
-   */
-  preview.muted =
-    true;
-
-  preview.defaultMuted =
-    true;
-
-  preview.playsInline =
-    true;
+  /* Video settings */
+  preview.muted = true;
+  preview.defaultMuted = true;
+  preview.playsInline = true;
 
   preview.setAttribute(
     'muted',
@@ -260,26 +234,25 @@ filmItems.forEach((film) => {
 
 
   /*
-   * Browser ko video metadata + first frame
-   * load karne do.
+   * IMPORTANT:
+   * Browser video ka first frame load karega.
    */
   preview.preload =
-    'metadata';
+    'auto';
 
 
   /*
-   * Video visible rahe.
+   * Video initially visible.
    */
   preview.style.opacity =
     '1';
 
 
   /*
-   * Poster image ko sirf backup ke roop mein
-   * rakha gaya hai.
+   * Poster initially visible.
    *
-   * Video ka first frame ready hone ke baad
-   * poster hide ho jayega.
+   * Jab tak video ka REAL first frame
+   * ready nahi hota, blank screen nahi hogi.
    */
   if (posterImg) {
 
@@ -288,31 +261,24 @@ filmItems.forEach((film) => {
 
     posterImg.style.pointerEvents =
       'none';
+
   }
 
 
   /*
    * =========================================
-   * FIRST FRAME
+   * VIDEO FIRST FRAME READY
    * =========================================
    */
 
-  const showFirstFrame = () => {
-
-    preview.style.opacity =
-      '1';
-
-
-    /*
-     * Video play nahi karega.
-     */
-    preview.pause();
-
+  const firstFrameReady = () => {
 
     /*
      * Video ko beginning par rakho.
      */
     try {
+
+      preview.pause();
 
       preview.currentTime =
         0;
@@ -321,8 +287,14 @@ filmItems.forEach((film) => {
 
 
     /*
-     * Ab poster ki zarurat nahi.
-     * Video ka REAL first frame dikhega.
+     * REAL video frame visible.
+     */
+    preview.style.opacity =
+      '1';
+
+
+    /*
+     * Ab poster hide.
      */
     if (posterImg) {
 
@@ -330,27 +302,24 @@ filmItems.forEach((film) => {
         '0';
 
     }
+
   };
 
 
   /*
-   * IMPORTANT:
-   *
-   * Event listener pehle.
-   * Source/load baad mein.
+   * Listener PEHLE lag raha hai.
    */
   preview.addEventListener(
     'loadeddata',
-    showFirstFrame
+    firstFrameReady,
+    { once: true }
   );
 
 
   preview.addEventListener(
     'canplay',
-    showFirstFrame,
-    {
-      once: true
-    }
+    firstFrameReady,
+    { once: true }
   );
 
 
@@ -365,8 +334,7 @@ filmItems.forEach((film) => {
     () => {
 
       /*
-       * Video fail hone par poster visible
-       * rehne do.
+       * Video fail hua to poster hi rahe.
        */
       preview.style.opacity =
         '0';
@@ -384,17 +352,13 @@ filmItems.forEach((film) => {
 
   /*
    * =========================================
-   * VIDEO SOURCE
+   * LOAD VIDEO
    * =========================================
    */
 
   preview.src =
     asset.video;
 
-
-  /*
-   * Browser ko video load karne bolo.
-   */
   preview.load();
 
 
@@ -408,9 +372,6 @@ filmItems.forEach((film) => {
     'pointerenter',
     () => {
 
-      /*
-       * Sirf desktop mouse hover.
-       */
       if (
         !window.matchMedia(
           '(hover: hover) and (pointer: fine)'
@@ -418,13 +379,6 @@ filmItems.forEach((film) => {
       ) {
         return;
       }
-
-
-      /*
-       * Video muted hi rahe.
-       */
-      preview.muted =
-        true;
 
 
       /*
@@ -436,6 +390,10 @@ filmItems.forEach((film) => {
           '0';
 
       }
+
+
+      preview.muted =
+        true;
 
 
       /*
@@ -459,9 +417,6 @@ filmItems.forEach((film) => {
     'pointerleave',
     () => {
 
-      /*
-       * Sirf desktop mouse hover.
-       */
       if (
         !window.matchMedia(
           '(hover: hover) and (pointer: fine)'
@@ -478,7 +433,7 @@ filmItems.forEach((film) => {
 
 
       /*
-       * First frame par wapas.
+       * First frame.
        */
       try {
 
@@ -496,7 +451,10 @@ filmItems.forEach((film) => {
 
 
       /*
-       * Poster hidden.
+       * IMPORTANT:
+       *
+       * Poster ko wapas visible MAT karo.
+       * Video ka first frame hi rahega.
        */
       if (posterImg) {
 
@@ -510,6 +468,10 @@ filmItems.forEach((film) => {
 
 });
 
+
+/* =========================================================
+   REST OF THE SCRIPT
+========================================================= */
 
 /* =========================================================
    REST OF THE SCRIPT
