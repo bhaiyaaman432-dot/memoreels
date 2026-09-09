@@ -20,36 +20,32 @@ const ASSET_CONFIG = {
 },
 
   films: [
-    {
-      id: '01',
-      video: 'wedding-film-compressed-25mb.mp4',
-      thumbnail: '' 'assets/videos/compatible/wedding-film.jpg'
-    },
-
-    {
-      id: '02',
-      video: 'ring-ceremony-compressed-25mb.mp4',
-      thumbnail: '' 'assets/videos/compatible/ring-ceremony.jpg'
-    },
-
-    {
-      id: '03',
-      video: 'welcome-ceremony-compressed-25mb.mp4',
-      thumbnail: '' 'assets/videos/compatible/welcome-ceremony.jpg'
-    },
-
-    {
-      id: '04',
-      video: 'birthday-compressed-25mb.mp4',
-      thumbnail: '' 'assets/videos/compatible/birthday.jpg'
-    },
-
-    {
-      id: '05',
-      video: 'car-delivery-5.mp4',
-      thumbnail: '' 'assets/videos/compatible/car-delivery.jpg'
-    }
-  ],
+  {
+    id: '01',
+    video: 'wedding-film-compressed-25mb.mp4',
+    thumbnail: ''
+  },
+  {
+    id: '02',
+    video: 'ring-ceremony-compressed-25mb.mp4',
+    thumbnail: ''
+  },
+  {
+    id: '03',
+    video: 'welcome-ceremony-final.mp4',
+    thumbnail: ''
+  },
+  {
+    id: '04',
+    video: 'birthday-compressed-25mb.mp4',
+    thumbnail: ''
+  },
+  {
+    id: '05',
+    video: 'car-delivery-5.mp4',
+    thumbnail: ''
+  }
+],
 
   stories: {
     Weddings: {
