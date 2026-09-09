@@ -23,31 +23,31 @@ const ASSET_CONFIG = {
     {
       id: '01',
       video: 'wedding-film-compressed-25mb.mp4',
-      thumbnail: 'assets/videos/compatible/wedding-film.jpg'
+      thumbnail: '' 'assets/videos/compatible/wedding-film.jpg'
     },
 
     {
       id: '02',
       video: 'ring-ceremony-compressed-25mb.mp4',
-      thumbnail: 'assets/videos/compatible/ring-ceremony.jpg'
+      thumbnail: '' 'assets/videos/compatible/ring-ceremony.jpg'
     },
 
     {
       id: '03',
       video: 'welcome-ceremony-compressed-25mb.mp4',
-      thumbnail: 'assets/videos/compatible/welcome-ceremony.jpg'
+      thumbnail: '' 'assets/videos/compatible/welcome-ceremony.jpg'
     },
 
     {
       id: '04',
       video: 'birthday-compressed-25mb.mp4',
-      thumbnail: 'assets/videos/compatible/birthday.jpg'
+      thumbnail: '' 'assets/videos/compatible/birthday.jpg'
     },
 
     {
       id: '05',
       video: 'car-delivery-5.mp4',
-      thumbnail: 'assets/videos/compatible/car-delivery.jpg'
+      thumbnail: '' 'assets/videos/compatible/car-delivery.jpg'
     }
   ],
 
