@@ -179,57 +179,162 @@ setImageSource(storyImage, stories.Weddings.image);
 
 
 /* =========================================================
-   FEATURED FILMS - LAZY LOAD FIX (SUPER FAST)
+   FEATURED FILMS
 ========================================================= */
-const filmItems = document.querySelectorAll('.film-item');
 
-document.querySelectorAll('.film-preview').forEach((video) => {
-    video.style.opacity = '0'; 
-    video.muted = true;
-    video.defaultMuted = true;
-    video.playsInline = true;
-    // Preload hata diya taaki website atak na jaye
-    video.preload = 'none'; 
-});
+const filmItems =
+  document.querySelectorAll('.film-item');
+
 
 filmItems.forEach((film) => {
-  const asset = ASSET_CONFIG.films.find(item => item.id === film.dataset.film);
-  const preview = film.querySelector('.film-preview');
-  const posterImg = film.querySelector('img[data-asset-role="film-poster"]');
 
-  if (!asset) return;
+  const asset =
+    ASSET_CONFIG.films.find(
+      (item) =>
+        item.id === film.dataset.film
+    );
 
-  // Set initial poster image
-  if (asset.poster && posterImg) {
-    posterImg.src = asset.poster;
-    posterImg.style.display = 'block';
-    
-    // ERROR FALLBACK: Agar image path galat hua toh error dikhega console mein
-    posterImg.onerror = () => console.error("Image load nahi hui! Path check karo:", asset.poster);
+  const preview =
+    film.querySelector('.film-preview');
+
+  const posterImg =
+    film.querySelector(
+      'img[data-asset-role="film-poster"]'
+    );
+
+  if (!asset || !preview) {
+    return;
   }
 
-  if (!preview) return;
-  film.dataset.video = asset.video || '';
 
-  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  /* Video modal ke liye save */
+  film.dataset.video =
+    asset.video || '';
 
-  if (canHover) {
-    film.addEventListener('pointerenter', () => {
-      // MAGIC FIX: Video ka data SIRF tab load hoga jab hover karoge!
-      if (!preview.getAttribute('src')) {
-        preview.setAttribute('src', asset.video);
-        preview.load();
+
+  /* Video settings */
+  preview.muted = true;
+  preview.defaultMuted = true;
+  preview.playsInline = true;
+
+  preview.setAttribute('muted', '');
+  preview.setAttribute('playsinline', '');
+
+  /*
+   * IMPORTANT:
+   * Video pehle se load hoga,
+   * taaki uska ORIGINAL FIRST FRAME
+   * bina hover ke dikh sake.
+   */
+  preview.preload = 'auto';
+
+  preview.style.opacity = '1';
+
+
+  /*
+   * Agar purana poster image laga hua hai,
+   * use hide karo.
+   *
+   * Ab JPG thumbnail ki zarurat nahi.
+   */
+  if (posterImg) {
+    posterImg.style.display = 'none';
+  }
+
+
+  /*
+   * First frame ready hone ke baad
+   * video ko first frame par rok do.
+   */
+  const showFirstFrame = () => {
+
+    preview.style.opacity = '1';
+
+    preview.pause();
+
+    try {
+      preview.currentTime = 0;
+    } catch (e) {}
+
+  };
+
+
+  /*
+   * Listener PEHLE lagao.
+   */
+  preview.addEventListener(
+    'loadeddata',
+    showFirstFrame,
+    { once: true }
+  );
+
+
+  /*
+   * Actual video source.
+   */
+  preview.src =
+    asset.video;
+
+
+  /*
+   * Ab browser video load karega.
+   */
+  preview.load();
+
+
+  /*
+   * CURSOR ENTER
+   * Video play.
+   */
+  film.addEventListener(
+    'pointerenter',
+    () => {
+
+      if (
+        !window.matchMedia(
+          '(hover: hover) and (pointer: fine)'
+        ).matches
+      ) {
+        return;
       }
-      preview.style.opacity = '1'; 
-      preview.play().catch(() => {});
-    });
 
-    film.addEventListener('pointerleave', () => {
-      preview.style.opacity = '0'; 
+      preview.muted = true;
+
+      preview.play().catch(
+        () => {}
+      );
+
+    }
+  );
+
+
+  /*
+   * CURSOR LEAVE
+   * Video stop + first frame.
+   */
+  film.addEventListener(
+    'pointerleave',
+    () => {
+
+      if (
+        !window.matchMedia(
+          '(hover: hover) and (pointer: fine)'
+        ).matches
+      ) {
+        return;
+      }
+
       preview.pause();
-      try { if (preview.readyState >= 2) preview.currentTime = 0; } catch (e) {}
-    });
-  }
+
+      try {
+        preview.currentTime = 0;
+      } catch (e) {}
+
+      preview.style.opacity = '1';
+
+    }
+  );
+
 });
 
 /* =========================================================
