@@ -186,6 +186,21 @@ const filmItems =
   document.querySelectorAll('.film-item');
 
 
+/*
+ * MEMOREELS FILM PREVIEW
+ *
+ * Normal state:
+ *   Video ka apna first frame visible.
+ *
+ * Cursor enter:
+ *   Video play.
+ *
+ * Cursor leave:
+ *   Video pause + first frame.
+ *
+ * Poster JPG ki dependency nahi.
+ */
+
 filmItems.forEach((film) => {
 
   const asset =
@@ -194,102 +209,208 @@ filmItems.forEach((film) => {
         item.id === film.dataset.film
     );
 
+
   const preview =
     film.querySelector('.film-preview');
+
 
   const posterImg =
     film.querySelector(
       'img[data-asset-role="film-poster"]'
     );
 
-  if (!asset || !preview) {
+
+  if (
+    !asset ||
+    !preview ||
+    !asset.video
+  ) {
     return;
   }
 
 
-  /* Video modal ke liye save */
+  /*
+   * Modal ke liye video path save.
+   */
   film.dataset.video =
-    asset.video || '';
-
-
-  /* Video settings */
-  preview.muted = true;
-  preview.defaultMuted = true;
-  preview.playsInline = true;
-
-  preview.setAttribute('muted', '');
-  preview.setAttribute('playsinline', '');
-
-  /*
-   * IMPORTANT:
-   * Video pehle se load hoga,
-   * taaki uska ORIGINAL FIRST FRAME
-   * bina hover ke dikh sake.
-   */
-  preview.preload = 'auto';
-
-  preview.style.opacity = '1';
+    asset.video;
 
 
   /*
-   * Agar purana poster image laga hua hai,
-   * use hide karo.
-   *
-   * Ab JPG thumbnail ki zarurat nahi.
+   * Video settings.
    */
-  if (posterImg) {
-    posterImg.style.display = 'none';
-  }
+  preview.muted =
+    true;
 
+  preview.defaultMuted =
+    true;
 
-  /*
-   * First frame ready hone ke baad
-   * video ko first frame par rok do.
-   */
-  const showFirstFrame = () => {
+  preview.playsInline =
+    true;
 
-    preview.style.opacity = '1';
+  preview.setAttribute(
+    'muted',
+    ''
+  );
 
-    preview.pause();
-
-    try {
-      preview.currentTime = 0;
-    } catch (e) {}
-
-  };
-
-
-  /*
-   * Listener PEHLE lagao.
-   */
-  preview.addEventListener(
-    'loadeddata',
-    showFirstFrame,
-    { once: true }
+  preview.setAttribute(
+    'playsinline',
+    ''
   );
 
 
   /*
-   * Actual video source.
+   * Browser ko video metadata + first frame
+   * load karne do.
    */
+  preview.preload =
+    'metadata';
+
+
+  /*
+   * Video visible rahe.
+   */
+  preview.style.opacity =
+    '1';
+
+
+  /*
+   * Poster image ko sirf backup ke roop mein
+   * rakha gaya hai.
+   *
+   * Video ka first frame ready hone ke baad
+   * poster hide ho jayega.
+   */
+  if (posterImg) {
+
+    posterImg.style.opacity =
+      '1';
+
+    posterImg.style.pointerEvents =
+      'none';
+  }
+
+
+  /*
+   * =========================================
+   * FIRST FRAME
+   * =========================================
+   */
+
+  const showFirstFrame = () => {
+
+    preview.style.opacity =
+      '1';
+
+
+    /*
+     * Video play nahi karega.
+     */
+    preview.pause();
+
+
+    /*
+     * Video ko beginning par rakho.
+     */
+    try {
+
+      preview.currentTime =
+        0;
+
+    } catch (error) {}
+
+
+    /*
+     * Ab poster ki zarurat nahi.
+     * Video ka REAL first frame dikhega.
+     */
+    if (posterImg) {
+
+      posterImg.style.opacity =
+        '0';
+
+    }
+  };
+
+
+  /*
+   * IMPORTANT:
+   *
+   * Event listener pehle.
+   * Source/load baad mein.
+   */
+  preview.addEventListener(
+    'loadeddata',
+    showFirstFrame
+  );
+
+
+  preview.addEventListener(
+    'canplay',
+    showFirstFrame,
+    {
+      once: true
+    }
+  );
+
+
+  /*
+   * =========================================
+   * VIDEO ERROR
+   * =========================================
+   */
+
+  preview.addEventListener(
+    'error',
+    () => {
+
+      /*
+       * Video fail hone par poster visible
+       * rehne do.
+       */
+      preview.style.opacity =
+        '0';
+
+      if (posterImg) {
+
+        posterImg.style.opacity =
+          '1';
+
+      }
+
+    }
+  );
+
+
+  /*
+   * =========================================
+   * VIDEO SOURCE
+   * =========================================
+   */
+
   preview.src =
     asset.video;
 
 
   /*
-   * Ab browser video load karega.
+   * Browser ko video load karne bolo.
    */
   preview.load();
 
 
   /*
+   * =========================================
    * CURSOR ENTER
-   * Video play.
+   * =========================================
    */
+
   film.addEventListener(
     'pointerenter',
     () => {
 
+      /*
+       * Sirf desktop mouse hover.
+       */
       if (
         !window.matchMedia(
           '(hover: hover) and (pointer: fine)'
@@ -298,8 +419,28 @@ filmItems.forEach((film) => {
         return;
       }
 
-      preview.muted = true;
 
+      /*
+       * Video muted hi rahe.
+       */
+      preview.muted =
+        true;
+
+
+      /*
+       * Poster hide.
+       */
+      if (posterImg) {
+
+        posterImg.style.opacity =
+          '0';
+
+      }
+
+
+      /*
+       * Video play.
+       */
       preview.play().catch(
         () => {}
       );
@@ -309,13 +450,18 @@ filmItems.forEach((film) => {
 
 
   /*
+   * =========================================
    * CURSOR LEAVE
-   * Video stop + first frame.
+   * =========================================
    */
+
   film.addEventListener(
     'pointerleave',
     () => {
 
+      /*
+       * Sirf desktop mouse hover.
+       */
       if (
         !window.matchMedia(
           '(hover: hover) and (pointer: fine)'
@@ -324,18 +470,50 @@ filmItems.forEach((film) => {
         return;
       }
 
+
+      /*
+       * Video stop.
+       */
       preview.pause();
 
-      try {
-        preview.currentTime = 0;
-      } catch (e) {}
 
-      preview.style.opacity = '1';
+      /*
+       * First frame par wapas.
+       */
+      try {
+
+        preview.currentTime =
+          0;
+
+      } catch (error) {}
+
+
+      /*
+       * Video visible.
+       */
+      preview.style.opacity =
+        '1';
+
+
+      /*
+       * Poster hidden.
+       */
+      if (posterImg) {
+
+        posterImg.style.opacity =
+          '0';
+
+      }
 
     }
   );
 
 });
+
+
+/* =========================================================
+   REST OF THE SCRIPT
+========================================================= */
 
 /* =========================================================
    REST OF THE SCRIPT
