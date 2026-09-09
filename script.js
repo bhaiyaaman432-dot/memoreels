@@ -15,23 +15,23 @@ const ASSET_CONFIG = {
   films: [
     {
       id: '01',
-      video: 'wedding-film-compressed-25mb.mp4'
+      video: 'wedding-film-compressed-25mb.mp4#t=0.001'
     },
     {
       id: '02',
-      video: 'ring-ceremony-compressed-25mb.mp4'
+      video: 'ring-ceremony-compressed-25mb.mp4#t=0.001'
     },
     {
       id: '03',
-      video: 'welcome-ceremony-final.mp4'
+      video: 'welcome-ceremony-final.mp4#t=0.001'
     },
     {
       id: '04',
-      video: 'birthday-compressed-25mb.mp4'
+      video: 'birthday-compressed-25mb.mp4#t=0.001'
     },
     {
       id: '05',
-      video: 'car-delivery-5.mp4'
+      video: 'car-delivery-5.mp4#t=0.001'
     }
   ],
 
