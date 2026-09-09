@@ -15,28 +15,23 @@ const ASSET_CONFIG = {
   films: [
     {
       id: '01',
-      video: 'wedding-film-compressed-25mb.mp4',
-      poster: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80' // Temp Wedding Poster
+      video: 'wedding-film-compressed-25mb.mp4#t=0.001'
     },
     {
       id: '02',
-      video: 'ring-ceremony-compressed-25mb.mp4',
-      poster: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?auto=format&fit=crop&w=800&q=80' // Temp Ring Ceremony Poster
+      video: 'ring-ceremony-compressed-25mb.mp4#t=0.001'
     },
     {
       id: '03',
-      video: 'welcome-ceremony-final.mp4',
-      poster: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80' // Temp Welcome Poster
+      video: 'welcome-ceremony-final.mp4#t=0.001'
     },
     {
       id: '04',
-      video: 'birthday-compressed-25mb.mp4',
-      poster: 'https://images.unsplash.com/photo-1530103862676-de3c9de59f9e?auto=format&fit=crop&w=800&q=80' // Temp Birthday Poster
+      video: 'birthday-compressed-25mb.mp4#t=0.001'
     },
     {
       id: '05',
-      video: 'car-delivery-5.mp4',
-      poster: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80' // Temp Car Delivery Poster
+      video: 'car-delivery-5.mp4#t=0.001'
     }
   ],
 
@@ -246,60 +241,56 @@ setImageSource(storyImage, stories.Weddings.image);
 
 
 /* =========================================================
-   FEATURED FILMS - THE ULTIMATE FIX 
+   FEATURED FILMS - ORIGINAL LOCALHOST BEHAVIOR FIX
 ========================================================= */
 
 const filmItems = document.querySelectorAll('.film-item');
 
-// BUG FIX: Pehle video ko zero opacity par chupao taaki image dikh sake!
 document.querySelectorAll('.film-preview').forEach((video) => {
-    video.style.opacity = '0'; 
+    // Opacity hamesha 1 rakhenge taaki video ka first frame dikhe!
+    video.style.opacity = '1'; 
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
     video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
-    video.preload = 'metadata'; // Saves data on page load
+    video.preload = 'metadata'; 
 });
 
 filmItems.forEach((film) => {
   const asset = ASSET_CONFIG.films.find(item => item.id === film.dataset.film);
   const preview = film.querySelector('.film-preview');
+  
+  // Jo pehle faltu ke img tag the usko ignore karenge
   const posterImg = film.querySelector('img[data-asset-role="film-poster"]');
-
-  if (!asset) return;
-
-  // 1. SET POSTER IMAGE FIRST
-  if (asset.poster && posterImg) {
-    posterImg.src = asset.poster;
+  if (posterImg) {
+    posterImg.style.display = 'none'; // Unsplash wali pic chhupao
   }
 
-  if (!preview) return;
+  if (!asset || !preview) return;
 
-  // Save video path for modal
-  film.dataset.video = asset.video || '';
+  // Save clean video path for modal (remove #t=0.001)
+  film.dataset.video = asset.video ? asset.video.replace('#t=0.001', '') : '';
+  
   if (asset.video) {
     preview.src = asset.video;
   }
 
-  // Desktop hover play magic
+  // Desktop hover logic
   const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
   if (canHover) {
     film.addEventListener('pointerenter', () => {
       if (!preview.src) return;
-      
-      // Jab hover ho toh video smooth fade in hoga
-      preview.style.opacity = '1'; 
+      preview.muted = true;
       preview.play().catch(() => {});
     });
 
     film.addEventListener('pointerleave', () => {
-      // Jab hover hate, toh video chupa kar wapas photo dikha do
-      preview.style.opacity = '0'; 
       preview.pause();
       try {
-        preview.currentTime = 0;
+        // Wapas 0.001 par laao taaki poster image bani rahe
+        preview.currentTime = 0.001;
       } catch (e) {}
     });
   }
