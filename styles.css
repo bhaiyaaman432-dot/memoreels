@@ -930,7 +930,8 @@ h2 em{
 
   z-index:2;
 
-  opacity:1;
+  /* Hidden until the corresponding film is actually loaded + playing. */
+  opacity:0;
 
   filter:saturate(.72) contrast(1.04);
 
@@ -939,6 +940,20 @@ h2 em{
   background:#24231f;
 
   pointer-events:none;
+
+}
+
+/* Default state: always show the real poster image. */
+.film-poster-slot img{
+
+  opacity:1;
+
+}
+
+/* Hover/active state: reveal the video above the poster. */
+.film-poster-slot.has-video .film-preview{
+
+  opacity:1;
 
 }
 
