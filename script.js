@@ -1,584 +1,1945 @@
 /*
+ * ==========================================================
  * MEMOREELS
- * Main interaction + media configuration
+ * Main site JavaScript
+ * ==========================================================
  */
+
+
+/* ==========================================================
+   ASSET CONFIGURATION
+========================================================== */
 
 const ASSET_CONFIG = {
   hero: {
     image: ''
   },
+
   about: {
-    image: 'images/Untitled.jpg'
+    image: 'assets/images/Untitled.jpg'
   },
+
   films: [
     {
       id: '01',
       video: 'wedding-film-compressed-25mb.mp4',
-      poster: 'images/poster-1.jpg' 
+      thumbnail: 'images/poster-1.jpg'
     },
+
     {
       id: '02',
       video: 'ring-ceremony-compressed-25mb.mp4',
-      poster: 'images/poster-2.jpg'
+      thumbnail: 'images/poster-2.jpg'
     },
+
     {
       id: '03',
       video: 'welcome-ceremony-final.mp4',
-      poster: 'images/poster-3.jpg'
+      thumbnail: 'images/poster-3.jpg'
     },
+
     {
       id: '04',
       video: 'birthday-compressed-25mb.mp4',
-      poster: 'images/poster-4.jpg'
+      thumbnail: 'images/poster-4.jpg'
     },
+
     {
       id: '05',
       video: 'car-delivery-5.mp4',
-      poster: 'images/poster-5.jpg'
+      thumbnail: 'images/poster-5.jpg'
     }
   ],
+
   stories: {
-    Weddings: { image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=85' },
-    Celebrations: { image: 'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=1000&q=85' },
-    Events: { image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1000&q=85' }
+    Weddings: {
+      image:
+        'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=85'
+    },
+
+    Celebrations: {
+      image:
+        'https://images.unsplash.com/photo-1464349153735-7db50ed83c84?auto=format&fit=crop&w=1000&q=85'
+    },
+
+    Events: {
+      image:
+        'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1000&q=85'
+    }
   }
 };
 
 
-/* =========================================================
-   CONTACT / WHATSAPP
-========================================================= */
-const menuToggle = document.querySelector('.menu-toggle');
-const mainNav = document.querySelector('.main-nav');
+/* ==========================================================
+   CONTACT
+========================================================== */
+
 const WHATSAPP_NUMBER = '917699135521';
-const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
-const FULL_PORTFOLIO_DRIVE_URL = 'https://drive.google.com/drive/folders/1drHYXtt68WriUwYl-eWJwGoW9K8ONjWD';
-const NORMAL_WHATSAPP_MESSAGE = `Hello Ankit! 👋\n\nI came across Memoreels and would like to know more about your photography / films services.\n\nCould you please share the details and availability?\n\nThank you!`;
+
+const WHATSAPP_URL =
+  `https://wa.me/${WHATSAPP_NUMBER}`;
+
+const FULL_PORTFOLIO_DRIVE_URL =
+  'https://drive.google.com/drive/folders/1drHYXtt68WriUwYl-eWJwGoW9K8ONjWD';
+
+
+const NORMAL_WHATSAPP_MESSAGE = `Hello Ankit! 👋
+
+I came across Memoreels and would like to know more about your photography / films services.
+
+Could you please share the details and availability?
+
+Thank you!`;
+
 
 const openWhatsApp = (message) => {
-  const url = `${WHATSAPP_URL}?text=${encodeURIComponent(message)}`;
-  window.open(url, '_blank', 'noopener,noreferrer');
+
+  const url =
+    `${WHATSAPP_URL}?text=${encodeURIComponent(message)}`;
+
+  window.open(
+    url,
+    '_blank',
+    'noopener,noreferrer'
+  );
 };
+
+
+/* ==========================================================
+   ELEMENTS
+========================================================== */
+
+const menuToggle =
+  document.querySelector('.menu-toggle');
+
+const mainNav =
+  document.querySelector('.main-nav');
+
+const siteHeader =
+  document.querySelector('.site-header');
+
+
+/* ==========================================================
+   CONTACT BUTTON NORMALIZATION
+========================================================== */
 
 const normalizeContactActions = () => {
-  const contactActions = document.querySelector('.contact-actions');
-  const combinedAction = contactActions?.querySelector('a[href^="tel:"]');
 
-  if (combinedAction && combinedAction.textContent.includes('WhatsApp / Call')) {
-    const whatsappAction = document.createElement('a');
-    whatsappAction.className = 'text-link whatsapp-link';
-    whatsappAction.href = WHATSAPP_URL;
-    whatsappAction.target = '_blank';
-    whatsappAction.rel = 'noreferrer';
-    whatsappAction.innerHTML = 'WhatsApp <span>↗</span>';
-    combinedAction.textContent = 'Call ';
-    const arrow = document.createElement('span');
-    arrow.textContent = '↗';
-    combinedAction.append(arrow);
-    contactActions.insertBefore(whatsappAction, combinedAction);
-  }
-
-  const details = document.querySelector('.contact-details');
-  const combinedDetails = [...(details?.querySelectorAll('span') || [])].find(
-      (item) => item.textContent.includes('WhatsApp / Call')
-  );
-
-  if (combinedDetails) {
-    combinedDetails.outerHTML = '<span>WHATSAPP <a class="whatsapp-link" href="https://wa.me/917699135521" target="_blank" rel="noreferrer">+91 7699135521 ↗</a></span><span>CALL <a href="tel:+917699135521">+91 7699135521 ↗</a></span>';
-  }
-
-  const contactBookButton = contactActions?.querySelector('.button');
-  if (contactBookButton) contactBookButton.href = '#enquiry-form';
-};
-normalizeContactActions();
-
-const portfolioLink = document.querySelector('.portfolio-cta-link');
-if (portfolioLink) {
-  portfolioLink.href = FULL_PORTFOLIO_DRIVE_URL;
-  portfolioLink.target = '_blank';
-  portfolioLink.rel = 'noopener noreferrer';
-}
-
-document.querySelectorAll('a[href^="https://wa.me/"]').forEach((link) => {
-    if (link.dataset.whatsappBound === 'true') return;
-    link.dataset.whatsappBound = 'true';
-    link.addEventListener('click', (event) => {
-        event.preventDefault();
-        openWhatsApp(NORMAL_WHATSAPP_MESSAGE);
-    });
-});
-
-menuToggle?.addEventListener('click', () => {
-    const isOpen = mainNav.classList.toggle('is-open');
-    menuToggle.setAttribute('aria-expanded', String(isOpen));
-});
-
-document.querySelectorAll('.main-nav a').forEach((link) => {
-    link.addEventListener('click', () => {
-        mainNav.classList.remove('is-open');
-        menuToggle?.setAttribute('aria-expanded', 'false');
-    });
-});
-
-const siteHeader = document.querySelector('.site-header');
-const navSections = [...document.querySelectorAll('main > section[id]')];
-const navLinks = [...document.querySelectorAll('.main-nav a[href^="#"]')];
-
-const updateNavigation = () => {
-  siteHeader?.classList.toggle('is-scrolled', window.scrollY > 12);
-  const currentSection = navSections.reduce((current, section) => {
-        if (window.scrollY + 160 >= section.offsetTop) return section.id;
-        return current;
-      }, 'work');
-  navLinks.forEach((link) => {
-    link.classList.toggle('is-active', link.getAttribute('href') === `#${currentSection}`);
-  });
-};
-updateNavigation();
-window.addEventListener('scroll', updateNavigation, { passive: true });
-
-const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          revealObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-
-document.querySelectorAll('.reveal').forEach((element) => {
-    revealObserver.observe(element);
-});
-
-const stories = {
-  Weddings: { image: ASSET_CONFIG.stories.Weddings.image, label: '01 / Weddings', description: 'Cinematic films, photography and reels for your day.' },
-  Celebrations: { image: ASSET_CONFIG.stories.Celebrations.image, label: '02 / Celebrations', description: 'Birthdays, engagements and moments worth keeping.' },
-  Events: { image: ASSET_CONFIG.stories.Events.image, label: '03 / Events', description: 'Stories from launches, gatherings and live moments.' }
-};
-
-const storyImage = document.querySelector('#story-image');
-const storyLabel = document.querySelector('#story-label');
-const storyDescription = document.querySelector('#story-description');
-
-const assetExists = async (source) => {
-  if (!source) return false;
-  if (source.startsWith('http://') || source.startsWith('https://')) return true;
-  try { return (await fetch(source, { method: 'HEAD' })).ok; } catch { return false; }
-};
-
-const setImageSource = async (image, source) => {
-    if (!image || !source) return;
-    if (!(await assetExists(source))) return;
-    image.src = source;
-    image.closest('.hero-asset-slot, .about-asset-slot')?.classList.remove('asset-missing');
-};
-
-setImageSource(document.querySelector('#ankit-camera-image'), ASSET_CONFIG.hero.image);
-setImageSource(document.querySelector('#ankit-portrait-image'), ASSET_CONFIG.about.image);
-setImageSource(storyImage, stories.Weddings.image);
+  const contactActions =
+    document.querySelector('.contact-actions');
 
 
-/* =========================================================
-   FEATURED FILMS
-========================================================= */
-
-const filmItems =
-  document.querySelectorAll('.film-item');
-
-
-filmItems.forEach((film) => {
-
-  const asset =
-    ASSET_CONFIG.films.find(
-      (item) =>
-        item.id === film.dataset.film
-    );
-
-  const preview =
-    film.querySelector('.film-preview');
-
-  const posterImg =
-    film.querySelector(
-      'img[data-asset-role="film-poster"]'
+  const combinedAction =
+    contactActions?.querySelector(
+      'a[href^="tel:"]'
     );
 
 
   if (
-    !asset ||
-    !preview ||
-    !asset.video
+    combinedAction &&
+    combinedAction.textContent.includes(
+      'WhatsApp / Call'
+    )
   ) {
+
+    const whatsappAction =
+      document.createElement('a');
+
+    whatsappAction.className =
+      'text-link whatsapp-link';
+
+    whatsappAction.href =
+      WHATSAPP_URL;
+
+    whatsappAction.target =
+      '_blank';
+
+    whatsappAction.rel =
+      'noreferrer';
+
+    whatsappAction.innerHTML =
+      'WhatsApp <span>↗</span>';
+
+
+    combinedAction.textContent =
+      'Call ';
+
+
+    const arrow =
+      document.createElement('span');
+
+    arrow.textContent =
+      '↗';
+
+
+    combinedAction.append(
+      arrow
+    );
+
+
+    contactActions.insertBefore(
+      whatsappAction,
+      combinedAction
+    );
+  }
+
+
+  const details =
+    document.querySelector(
+      '.contact-details'
+    );
+
+
+  const combinedDetails =
+    [
+      ...(details?.querySelectorAll(
+        'span'
+      ) || [])
+    ].find(
+      (item) =>
+        item.textContent.includes(
+          'WhatsApp / Call'
+        )
+    );
+
+
+  if (combinedDetails) {
+
+    combinedDetails.outerHTML =
+      '<span>WHATSAPP <a class="whatsapp-link" href="https://wa.me/917699135521" target="_blank" rel="noreferrer">+91 7699135521 ↗</a></span>' +
+      '<span>CALL <a href="tel:+917699135521">+91 7699135521 ↗</a></span>';
+  }
+
+
+  const contactBookButton =
+    contactActions?.querySelector(
+      '.button'
+    );
+
+
+  if (contactBookButton) {
+
+    contactBookButton.href =
+      '#contact';
+
+    contactBookButton.dataset.contactScroll =
+      'true';
+  }
+};
+
+
+normalizeContactActions();
+
+
+/* ==========================================================
+   PORTFOLIO
+========================================================== */
+
+const portfolioLink =
+  document.querySelector(
+    '.portfolio-cta-link'
+  );
+
+
+if (portfolioLink) {
+
+  portfolioLink.href =
+    FULL_PORTFOLIO_DRIVE_URL;
+}
+
+
+/* ==========================================================
+   WHATSAPP LINKS
+========================================================== */
+
+document
+  .querySelectorAll(
+    'a[href^="https://wa.me/"]'
+  )
+  .forEach(
+    (link) => {
+
+      if (
+        link.dataset.whatsappBound ===
+        'true'
+      ) {
+        return;
+      }
+
+
+      link.dataset.whatsappBound =
+        'true';
+
+
+      link.addEventListener(
+        'click',
+        (event) => {
+
+          event.preventDefault();
+
+
+          openWhatsApp(
+            NORMAL_WHATSAPP_MESSAGE
+          );
+        }
+      );
+    }
+  );
+
+
+/* ==========================================================
+   TOP / CONTACT SMOOTH SCROLL
+========================================================== */
+
+const scrollToTop = () => {
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+
+};
+
+
+const scrollToContact = () => {
+
+  const contactSection =
+    document.querySelector(
+      '#contact'
+    );
+
+
+  if (!contactSection) {
     return;
   }
 
 
-  /* Video path for modal */
-  film.dataset.video =
-    asset.video;
+  const headerHeight =
+    siteHeader?.offsetHeight ||
+    88;
 
 
-  /* Video settings */
-  preview.muted = true;
-  preview.defaultMuted = true;
-  preview.playsInline = true;
+  const targetPosition =
+    contactSection.getBoundingClientRect().top +
+    window.scrollY -
+    headerHeight;
 
-  preview.setAttribute(
-    'muted',
-    ''
+
+  window.scrollTo({
+
+    top:
+      Math.max(
+        0,
+        targetPosition
+      ),
+
+    behavior:
+      'smooth'
+  });
+};
+
+
+/* ==========================================================
+   BOOK A SHOOT
+========================================================== */
+
+document
+  .querySelectorAll(
+    '[data-contact-scroll="true"]'
+  )
+  .forEach(
+    (button) => {
+
+      button.addEventListener(
+        'click',
+        (event) => {
+
+          event.preventDefault();
+
+
+          scrollToContact();
+
+
+          /*
+           * Remove #contact from URL
+           * so the browser does not create
+           * another jump.
+           */
+
+          history.replaceState(
+            null,
+            '',
+            window.location.pathname +
+            window.location.search
+          );
+        }
+      );
+    }
   );
 
-  preview.setAttribute(
-    'playsinline',
-    ''
+
+/* ==========================================================
+   BACK TO TOP
+========================================================== */
+
+document
+  .querySelectorAll(
+    'a[href="#top"]'
+  )
+  .forEach(
+    (topLink) => {
+
+      topLink.addEventListener(
+        'click',
+        (event) => {
+
+          event.preventDefault();
+
+
+          scrollToTop();
+
+
+          /*
+           * Keep the URL clean.
+           */
+
+          history.replaceState(
+            null,
+            '',
+            window.location.pathname +
+            window.location.search
+          );
+        }
+      );
+    }
   );
 
 
-  /*
-   * IMPORTANT:
-   * Browser video ka first frame load karega.
-   */
-  preview.preload =
-    'auto';
+/* ==========================================================
+   MOBILE NAV
+========================================================== */
+
+menuToggle?.addEventListener(
+  'click',
+  () => {
+
+    const isOpen =
+      mainNav.classList.toggle(
+        'is-open'
+      );
 
 
-  /*
-   * Video initially visible.
-   */
-  preview.style.opacity =
-    '1';
+    menuToggle.setAttribute(
+      'aria-expanded',
+      String(isOpen)
+    );
+  }
+);
 
 
-  /*
-   * Poster initially visible.
-   *
-   * Jab tak video ka REAL first frame
-   * ready nahi hota, blank screen nahi hogi.
-   */
-  if (posterImg) {
+document
+  .querySelectorAll(
+    '.main-nav a'
+  )
+  .forEach(
+    (link) => {
 
-    posterImg.style.opacity =
-      '1';
+      link.addEventListener(
+        'click',
+        () => {
 
-    posterImg.style.pointerEvents =
-      'none';
+          mainNav.classList.remove(
+            'is-open'
+          );
 
+
+          menuToggle?.setAttribute(
+            'aria-expanded',
+            'false'
+          );
+        }
+      );
+    }
+  );
+
+
+/* ==========================================================
+   NAVIGATION / ACTIVE SECTION
+========================================================== */
+
+const navSections = [
+  ...document.querySelectorAll(
+    'main > section[id]'
+  )
+];
+
+
+const navLinks = [
+  ...document.querySelectorAll(
+    '.main-nav a[href^="#"]'
+  )
+];
+
+
+const updateNavigation = () => {
+
+  siteHeader?.classList.toggle(
+    'is-scrolled',
+    window.scrollY > 12
+  );
+
+
+  const currentSection =
+    navSections.reduce(
+      (current, section) => {
+
+        if (
+          window.scrollY + 160 >=
+          section.offsetTop
+        ) {
+
+          return section.id;
+        }
+
+
+        return current;
+      },
+      'work'
+    );
+
+
+  navLinks.forEach(
+    (link) => {
+
+      link.classList.toggle(
+        'is-active',
+        link.getAttribute(
+          'href'
+        ) ===
+        `#${currentSection}`
+      );
+    }
+  );
+};
+
+
+updateNavigation();
+
+
+window.addEventListener(
+  'scroll',
+  updateNavigation,
+  {
+    passive: true
+  }
+);
+
+
+/* ==========================================================
+   REVEAL ANIMATIONS
+========================================================== */
+
+const revealObserver =
+  new IntersectionObserver(
+    (entries) => {
+
+      entries.forEach(
+        (entry) => {
+
+          if (
+            entry.isIntersecting
+          ) {
+
+            entry.target.classList.add(
+              'is-visible'
+            );
+
+
+            revealObserver.unobserve(
+              entry.target
+            );
+          }
+        }
+      );
+    },
+    {
+      threshold: 0.12
+    }
+  );
+
+
+document
+  .querySelectorAll(
+    '.reveal'
+  )
+  .forEach(
+    (element) => {
+
+      revealObserver.observe(
+        element
+      );
+    }
+  );
+
+
+/* ==========================================================
+   STORIES
+========================================================== */
+
+const stories = {
+
+  Weddings: {
+
+    image:
+      ASSET_CONFIG.stories.Weddings.image,
+
+    label:
+      '01 / Weddings',
+
+    description:
+      'Cinematic films, photography and reels for your day.'
+  },
+
+
+  Celebrations: {
+
+    image:
+      ASSET_CONFIG.stories.Celebrations.image,
+
+    label:
+      '02 / Celebrations',
+
+    description:
+      'Birthdays, engagements and moments worth keeping.'
+  },
+
+
+  Events: {
+
+    image:
+      ASSET_CONFIG.stories.Events.image,
+
+    label:
+      '03 / Events',
+
+    description:
+      'Stories from launches, gatherings and live moments.'
+  }
+
+};
+
+
+const storyImage =
+  document.querySelector(
+    '#story-image'
+  );
+
+
+const storyLabel =
+  document.querySelector(
+    '#story-label'
+  );
+
+
+const storyDescription =
+  document.querySelector(
+    '#story-description'
+  );
+
+
+/* ==========================================================
+   IMAGE HELPERS
+========================================================== */
+
+const assetExists = async (
+  source
+) => {
+
+  if (!source) {
+    return false;
   }
 
 
-  /*
-   * =========================================
-   * VIDEO FIRST FRAME READY
-   * =========================================
-   */
+  if (
+    !source.startsWith(
+      'assets/'
+    )
+  ) {
 
-  const firstFrameReady = () => {
-
-    /*
-     * Video ko beginning par rakho.
-     */
-    try {
-
-      preview.pause();
-
-      preview.currentTime =
-        0;
-
-    } catch (error) {}
+    return true;
+  }
 
 
-    /*
-     * REAL video frame visible.
-     */
-    preview.style.opacity =
-      '1';
+  try {
+
+    const response =
+      await fetch(
+        source,
+        {
+          method: 'HEAD'
+        }
+      );
 
 
-    /*
-     * Ab poster hide.
-     */
-    if (posterImg) {
+    return response.ok;
 
-      posterImg.style.opacity =
-        '0';
+  } catch {
 
+    return false;
+  }
+};
+
+
+const setImageSource = async (
+  image,
+  source
+) => {
+
+  if (!image || !source) {
+    return;
+  }
+
+
+  if (
+    !(await assetExists(source))
+  ) {
+
+    return;
+  }
+
+
+  image.src =
+    source;
+
+
+  image
+    .closest(
+      '.hero-asset-slot, .about-asset-slot'
+    )
+    ?.classList.remove(
+      'asset-missing'
+    );
+};
+
+
+/* ==========================================================
+   HERO / ABOUT
+========================================================== */
+
+setImageSource(
+  document.querySelector(
+    '#ankit-camera-image'
+  ),
+  ASSET_CONFIG.hero.image
+);
+
+
+setImageSource(
+  document.querySelector(
+    '#ankit-portrait-image'
+  ),
+  ASSET_CONFIG.about.image
+);
+
+
+setImageSource(
+  storyImage,
+  stories.Weddings.image
+);
+
+
+/* ==========================================================
+   FEATURED FILMS
+========================================================== */
+
+const filmItems = [
+  ...document.querySelectorAll(
+    '.film-item'
+  )
+];
+
+
+let activeFilm =
+  null;
+
+
+/* ==========================================================
+   STOP OTHER FILMS
+========================================================== */
+
+const stopOtherFilmPreviews = (
+  exceptVideo = null
+) => {
+
+  filmItems.forEach(
+    (film) => {
+
+      const video =
+        film.querySelector(
+          '.film-preview'
+        );
+
+
+      if (
+        !video ||
+        video === exceptVideo
+      ) {
+
+        return;
+      }
+
+
+      video.pause();
+
+
+      video.classList.remove(
+        'is-playing'
+      );
+
+
+      film
+        .querySelector(
+          '.film-poster-slot'
+        )
+        ?.classList.remove(
+          'has-video'
+        );
+    }
+  );
+};
+
+
+/* ==========================================================
+   PREPARE FILMS
+========================================================== */
+
+filmItems.forEach(
+  (film) => {
+
+    const asset =
+      ASSET_CONFIG.films.find(
+        (item) =>
+          item.id ===
+          film.dataset.film
+      );
+
+
+    const preview =
+      film.querySelector(
+        '.film-preview'
+      );
+
+
+    const thumbnail =
+      film.querySelector(
+        '.film-visual img'
+      );
+
+
+    if (
+      !asset ||
+      !preview
+    ) {
+
+      return;
     }
 
+
+    film.dataset.video =
+      asset.video;
+
+
+    preview.dataset.src =
+      asset.video;
+
+
+    preview.muted =
+      true;
+
+
+    preview.loop =
+      true;
+
+
+    preview.playsInline =
+      true;
+
+
+    preview.preload =
+      'none';
+
+
+    if (
+      thumbnail &&
+      asset.thumbnail
+    ) {
+
+      thumbnail.src =
+        asset.thumbnail;
+
+
+      thumbnail.loading =
+        'lazy';
+
+
+      thumbnail.decoding =
+        'async';
+    }
+
+
+    preview.addEventListener(
+      'error',
+      () => {
+
+        film
+          .querySelector(
+            '.film-poster-slot'
+          )
+          ?.classList.add(
+            'video-error'
+          );
+      }
+    );
+  }
+);
+
+
+/* ==========================================================
+   LOAD FILM VIDEO
+========================================================== */
+
+const loadFilmVideo = (
+  video
+) => {
+
+  return new Promise(
+    (resolve) => {
+
+      if (
+        !video ||
+        !video.dataset.src
+      ) {
+
+        resolve(false);
+
+        return;
+      }
+
+
+      if (
+        video.getAttribute(
+          'src'
+        )
+      ) {
+
+        resolve(true);
+
+        return;
+      }
+
+
+      const finishLoading =
+        () => {
+
+          video.removeEventListener(
+            'loadeddata',
+            finishLoading
+          );
+
+
+          video.removeEventListener(
+            'error',
+            failLoading
+          );
+
+
+          resolve(true);
+        };
+
+
+      const failLoading =
+        () => {
+
+          video.removeEventListener(
+            'loadeddata',
+            finishLoading
+          );
+
+
+          video.removeEventListener(
+            'error',
+            failLoading
+          );
+
+
+          resolve(false);
+        };
+
+
+      video.addEventListener(
+        'loadeddata',
+        finishLoading
+      );
+
+
+      video.addEventListener(
+        'error',
+        failLoading
+      );
+
+
+      video.src =
+        video.dataset.src;
+
+
+      video.load();
+    }
+  );
+};
+
+
+/* ==========================================================
+   PLAY FILM PREVIEW
+========================================================== */
+
+const playFilmPreview = async (
+  film
+) => {
+
+  const video =
+    film?.querySelector(
+      '.film-preview'
+    );
+
+
+  if (!video) {
+    return;
+  }
+
+
+  stopOtherFilmPreviews(
+    video
+  );
+
+
+  activeFilm =
+    film;
+
+
+  const loaded =
+    await loadFilmVideo(
+      video
+    );
+
+
+  if (
+    activeFilm !== film
+  ) {
+
+    return;
+  }
+
+
+  if (!loaded) {
+    return;
+  }
+
+
+  film
+    .querySelector(
+      '.film-poster-slot'
+    )
+    ?.classList.add(
+      'has-video'
+    );
+
+
+  try {
+
+    await video.play();
+
+  } catch {
+
+    /* autoplay may fail silently */
+
+  }
+};
+
+
+/* ==========================================================
+   PAUSE FILM PREVIEW
+========================================================== */
+
+const pauseFilmPreview = (
+  film
+) => {
+
+  const video =
+    film?.querySelector(
+      '.film-preview'
+    );
+
+
+  if (!video) {
+    return;
+  }
+
+
+  video.pause();
+
+
+  try {
+
+    video.currentTime =
+      0;
+
+  } catch {}
+
+
+  film
+    .querySelector(
+      '.film-poster-slot'
+    )
+    ?.classList.remove(
+      'has-video'
+    );
+
+
+  if (
+    activeFilm === film
+  ) {
+
+    activeFilm =
+      null;
+  }
+};
+
+
+/* ==========================================================
+   DESKTOP HOVER
+========================================================== */
+
+filmItems.forEach(
+  (film) => {
+
+    film.addEventListener(
+      'mouseenter',
+      () => {
+
+        if (
+          window.matchMedia(
+            '(hover: hover)'
+          ).matches
+        ) {
+
+          playFilmPreview(
+            film
+          );
+        }
+      }
+    );
+
+
+    film.addEventListener(
+      'mouseleave',
+      () => {
+
+        if (
+          window.matchMedia(
+            '(hover: hover)'
+          ).matches
+        ) {
+
+          pauseFilmPreview(
+            film
+          );
+        }
+      }
+    );
+  }
+);
+
+
+/* ==========================================================
+   MOBILE FILM AUTOPLAY
+========================================================== */
+
+let mobileActiveFilm =
+  null;
+
+
+const chooseMobileFilm = () => {
+
+  if (
+    window.matchMedia(
+      '(hover: hover)'
+    ).matches
+  ) {
+
+    return;
+  }
+
+
+  let bestFilm =
+    null;
+
+
+  let bestDistance =
+    Infinity;
+
+
+  filmItems.forEach(
+    (film) => {
+
+      const rect =
+        film.getBoundingClientRect();
+
+
+      const viewportCenter =
+        window.innerHeight /
+        2;
+
+
+      const filmCenter =
+        rect.top +
+        rect.height /
+        2;
+
+
+      const distance =
+        Math.abs(
+          filmCenter -
+          viewportCenter
+        );
+
+
+      const visibleTop =
+        Math.max(
+          rect.top,
+          0
+        );
+
+
+      const visibleBottom =
+        Math.min(
+          rect.bottom,
+          window.innerHeight
+        );
+
+
+      const visibleHeight =
+        Math.max(
+          0,
+          visibleBottom -
+          visibleTop
+        );
+
+
+      const visibility =
+        rect.height > 0
+          ? visibleHeight /
+            rect.height
+          : 0;
+
+
+      if (
+        visibility >= 0.35 &&
+        distance < bestDistance
+      ) {
+
+        bestDistance =
+          distance;
+
+
+        bestFilm =
+          film;
+      }
+    }
+  );
+
+
+  if (
+    bestFilm &&
+    bestFilm !==
+      mobileActiveFilm
+  ) {
+
+    if (
+      mobileActiveFilm
+    ) {
+
+      pauseFilmPreview(
+        mobileActiveFilm
+      );
+    }
+
+
+    mobileActiveFilm =
+      bestFilm;
+
+
+    playFilmPreview(
+      bestFilm
+    );
+  }
+};
+
+
+let mobileFilmTicking =
+  false;
+
+
+const handleMobileFilmScroll =
+  () => {
+
+    if (
+      mobileFilmTicking
+    ) {
+
+      return;
+    }
+
+
+    mobileFilmTicking =
+      true;
+
+
+    requestAnimationFrame(
+      () => {
+
+        chooseMobileFilm();
+
+
+        mobileFilmTicking =
+          false;
+      }
+    );
   };
 
 
-  /*
-   * Listener PEHLE lag raha hai.
-   */
-  preview.addEventListener(
-    'loadeddata',
-    firstFrameReady,
-    { once: true }
-  );
+window.addEventListener(
+  'scroll',
+  handleMobileFilmScroll,
+  {
+    passive: true
+  }
+);
 
 
-  preview.addEventListener(
-    'canplay',
-    firstFrameReady,
-    { once: true }
-  );
+window.addEventListener(
+  'resize',
+  handleMobileFilmScroll,
+  {
+    passive: true
+  }
+);
 
 
-  /*
-   * =========================================
-   * VIDEO ERROR
-   * =========================================
-   */
+window.addEventListener(
+  'orientationchange',
+  handleMobileFilmScroll,
+  {
+    passive: true
+  }
+);
 
-  preview.addEventListener(
-    'error',
-    () => {
 
-      /*
-       * Video fail hua to poster hi rahe.
-       */
-      preview.style.opacity =
-        '0';
+/* ==========================================================
+   STORY TABS
+========================================================== */
 
-      if (posterImg) {
+document
+  .querySelectorAll(
+    '.story-tab'
+  )
+  .forEach(
+    (tab) => {
 
-        posterImg.style.opacity =
-          '1';
+      tab.addEventListener(
+        'click',
+        () => {
 
-      }
+          const story =
+            stories[
+              tab.dataset.story
+            ];
 
+
+          if (!story) {
+            return;
+          }
+
+
+          document
+            .querySelector(
+              '.story-tab.is-active'
+            )
+            ?.classList.remove(
+              'is-active'
+            );
+
+
+          tab.classList.add(
+            'is-active'
+          );
+
+
+          tab.setAttribute(
+            'aria-selected',
+            'true'
+          );
+
+
+          if (storyImage) {
+
+            storyImage.style.opacity =
+              '0';
+          }
+
+
+          window.setTimeout(
+            () => {
+
+              if (
+                storyImage
+              ) {
+
+                storyImage.src =
+                  story.image;
+
+
+                storyImage.alt =
+                  `${story.label} story`;
+              }
+
+
+              if (
+                storyLabel
+              ) {
+
+                storyLabel.textContent =
+                  story.label;
+              }
+
+
+              if (
+                storyDescription
+              ) {
+
+                storyDescription.textContent =
+                  story.description;
+              }
+
+
+              if (
+                storyImage
+              ) {
+
+                storyImage.style.opacity =
+                  '1';
+              }
+
+            },
+            180
+          );
+        }
+      );
     }
   );
 
 
-  /*
-   * =========================================
-   * LOAD VIDEO
-   * =========================================
-   */
+/* ==========================================================
+   PLAY BUTTONS
+========================================================== */
 
-  preview.src =
-    asset.video;
+document
+  .querySelectorAll(
+    '.play-button'
+  )
+  .forEach(
+    (button) => {
 
-  preview.load();
+      button.addEventListener(
+        'click',
+        (event) => {
 
+          event.preventDefault();
 
-  /*
-   * =========================================
-   * CURSOR ENTER
-   * =========================================
-   */
-
-  film.addEventListener(
-    'pointerenter',
-    () => {
-
-      if (
-        !window.matchMedia(
-          '(hover: hover) and (pointer: fine)'
-        ).matches
-      ) {
-        return;
-      }
+          event.stopPropagation();
 
 
-      /*
-       * Poster hide.
-       */
-      if (posterImg) {
-
-        posterImg.style.opacity =
-          '0';
-
-      }
+          button.classList.toggle(
+            'is-playing'
+          );
 
 
-      preview.muted =
-        true;
+          const span =
+            button.querySelector(
+              'span'
+            );
 
 
-      /*
-       * Video play.
-       */
-      preview.play().catch(
-        () => {}
+          if (span) {
+
+            span.textContent =
+              button.classList.contains(
+                'is-playing'
+              )
+                ? 'Ⅱ'
+                : '▶';
+          }
+        }
       );
 
+
+      button.addEventListener(
+        'keydown',
+        (event) => {
+
+          if (
+            event.key ===
+              'Enter' ||
+            event.key ===
+              ' '
+          ) {
+
+            event.preventDefault();
+
+            button.click();
+          }
+        }
+      );
     }
   );
 
 
-  /*
-   * =========================================
-   * CURSOR LEAVE
-   * =========================================
-   */
+/* ==========================================================
+   FILM MODAL
+========================================================== */
 
-  film.addEventListener(
-    'pointerleave',
-    () => {
-
-      if (
-        !window.matchMedia(
-          '(hover: hover) and (pointer: fine)'
-        ).matches
-      ) {
-        return;
-      }
-
-
-      /*
-       * Video stop.
-       */
-      preview.pause();
-
-
-      /*
-       * First frame.
-       */
-      try {
-
-        preview.currentTime =
-          0;
-
-      } catch (error) {}
-
-
-      /*
-       * Video visible.
-       */
-      preview.style.opacity =
-        '1';
-
-
-      /*
-       * IMPORTANT:
-       *
-       * Poster ko wapas visible MAT karo.
-       * Video ka first frame hi rahega.
-       */
-      if (posterImg) {
-
-        posterImg.style.opacity =
-          '0';
-
-      }
-
-    }
+const filmModal =
+  document.querySelector(
+    '#film-modal'
   );
 
-});
+
+const filmPlayer =
+  document.querySelector(
+    '.film-player'
+  );
 
 
-/* =========================================================
-   REST OF THE SCRIPT
-========================================================= */
+const filmModalTitle =
+  document.querySelector(
+    '#film-modal-title'
+  );
 
-/* =========================================================
-   REST OF THE SCRIPT
-========================================================= */
 
-/* =========================================================
-   REST OF THE SCRIPT
-========================================================= */
-document.querySelectorAll('.story-tab').forEach((tab) => {
-    tab.addEventListener('click', () => {
-        const story = stories[tab.dataset.story];
-        if (!story) return;
-        document.querySelector('.story-tab.is-active')?.classList.remove('is-active');
-        document.querySelector('.story-tab[aria-selected="true"]')?.setAttribute('aria-selected', 'false');
-        tab.classList.add('is-active');
-        tab.setAttribute('aria-selected', 'true');
-        if (storyImage) storyImage.style.opacity = '0';
-        window.setTimeout(() => {
-            if (!storyImage) return;
-            storyImage.src = story.image;
-            storyImage.alt = `${storyLabel?.textContent || ''} story`;
-            if (storyLabel) storyLabel.textContent = story.label;
-            if (storyDescription) storyDescription.textContent = story.description;
-            storyImage.style.opacity = '1';
-          }, 180);
-      });
-  });
+const filmModalCategory =
+  document.querySelector(
+    '.film-modal-category'
+  );
 
-document.querySelectorAll('.play-button').forEach((button) => {
-    button.addEventListener('click', (event) => {
-        event.preventDefault();
-        button.classList.toggle('is-playing');
-        const icon = button.querySelector('span');
-        if (icon) icon.textContent = button.classList.contains('is-playing') ? 'Ⅱ' : '▶';
-      });
-    button.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); button.click(); }
-      });
-  });
 
-const filmModal = document.querySelector('#film-modal');
-const filmPlayer = document.querySelector('.film-player');
-const filmModalTitle = document.querySelector('#film-modal-title');
-const filmModalCategory = document.querySelector('.film-modal-category');
-const filmModalEmpty = document.querySelector('.film-modal-empty');
-const filmModalClose = document.querySelector('.film-modal-close');
+const filmModalEmpty =
+  document.querySelector(
+    '.film-modal-empty'
+  );
+
+
+const filmModalClose =
+  document.querySelector(
+    '.film-modal-close'
+  );
+
 
 const closeFilmModal = () => {
-  filmModal?.classList.remove('is-open');
-  filmModal?.setAttribute('aria-hidden', 'true');
-  document.body.classList.remove('modal-open');
-  if (filmPlayer) { filmPlayer.pause(); filmPlayer.removeAttribute('src'); filmPlayer.load(); }
+
+  filmModal?.classList.remove(
+    'is-open'
+  );
+
+
+  filmModal?.setAttribute(
+    'aria-hidden',
+    'true'
+  );
+
+
+  document.body.classList.remove(
+    'modal-open'
+  );
+
+
+  if (filmPlayer) {
+
+    filmPlayer.pause();
+
+
+    filmPlayer.removeAttribute(
+      'src'
+    );
+
+
+    filmPlayer.load();
+
+
+    filmPlayer.hidden =
+      false;
+  }
+
+
+  if (filmModalEmpty) {
+
+    filmModalEmpty.hidden =
+      true;
+  }
 };
 
-document.querySelectorAll('.film-item').forEach((film) => {
-    film.querySelector('.film-visual')?.addEventListener('click', (event) => {
-          event.preventDefault();
-          const title = film.querySelector('h3')?.textContent || 'Selected film';
-          const category = film.querySelector('.film-meta p')?.textContent || 'Selected film';
-          const videoSource = film.dataset.video?.trim();
 
-          if (filmModalTitle) filmModalTitle.textContent = title;
-          if (filmModalCategory) filmModalCategory.textContent = `Memoreels / ${category}`;
+/* ==========================================================
+   OPEN FILM MODAL
+========================================================== */
 
-          filmModal?.classList.add('is-open');
-          filmModal?.setAttribute('aria-hidden', 'false');
-          document.body.classList.add('modal-open');
+document
+  .querySelectorAll(
+    '.film-item'
+  )
+  .forEach(
+    (film) => {
 
-          if (videoSource && filmPlayer) {
-            filmPlayer.src = videoSource;
-            filmPlayer.hidden = false;
-            if (filmModalEmpty) filmModalEmpty.hidden = true;
-            filmPlayer.play().catch(() => {});
-          } else {
-            if (filmPlayer) filmPlayer.hidden = true;
-            if (filmModalEmpty) {
-              filmModalEmpty.hidden = false;
-              filmModalEmpty.textContent = film.dataset.film === '01' ? 'The Beginning will be available here once the final film is connected.' : 'This film is reserved for a future Memoreels release.';
+      film
+        .querySelector(
+          '.film-visual'
+        )
+        ?.addEventListener(
+          'click',
+          async (event) => {
+
+            event.preventDefault();
+
+
+            const title =
+              film.querySelector(
+                'h3'
+              )?.textContent ||
+              'Selected film';
+
+
+            const category =
+              film.querySelector(
+                '.film-meta p'
+              )?.textContent ||
+              'Selected film';
+
+
+            const videoSource =
+              film.dataset.video?.trim();
+
+
+            if (
+              filmModalTitle
+            ) {
+
+              filmModalTitle.textContent =
+                title;
             }
+
+
+            if (
+              filmModalCategory
+            ) {
+
+              filmModalCategory.textContent =
+                `Memoreels / ${category}`;
+            }
+
+
+            filmModal?.classList.add(
+              'is-open'
+            );
+
+
+            filmModal?.setAttribute(
+              'aria-hidden',
+              'false'
+            );
+
+
+            document.body.classList.add(
+              'modal-open'
+            );
+
+
+            if (
+              videoSource &&
+              filmPlayer
+            ) {
+
+              filmPlayer.src =
+                videoSource;
+
+
+              filmPlayer.hidden =
+                false;
+
+
+              if (
+                filmModalEmpty
+              ) {
+
+                filmModalEmpty.hidden =
+                  true;
+              }
+
+
+              try {
+
+                await filmPlayer.play();
+
+              } catch {
+
+                /* manual play remains available */
+              }
+
+            } else {
+
+              if (
+                filmPlayer
+              ) {
+
+                filmPlayer.hidden =
+                  true;
+              }
+
+
+              if (
+                filmModalEmpty
+              ) {
+
+                filmModalEmpty.hidden =
+                  false;
+
+
+                filmModalEmpty.textContent =
+                  'This film is reserved for a future Memoreels release.';
+              }
+            }
+
+
+            filmModalClose?.focus();
           }
-          filmModalClose?.focus();
-        });
-  });
+        );
+    }
+  );
 
-document.querySelectorAll('[data-modal-close]').forEach((control) => { control.addEventListener('click', closeFilmModal); });
-document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && filmModal?.classList.contains('is-open')) closeFilmModal(); });
-document.querySelectorAll('[data-asset-src]').forEach((asset) => { asset.addEventListener('error', () => { asset.closest('.hero-asset-slot, .about-asset-slot')?.classList.add('asset-missing'); }); });
 
-const enquiryForm = document.querySelector('#enquiry-form');
-const formStatus = document.querySelector('.form-status');
+/* ==========================================================
+   MODAL CLOSE
+========================================================== */
 
-enquiryForm?.addEventListener('submit', (event) => {
+document
+  .querySelectorAll(
+    '[data-modal-close]'
+  )
+  .forEach(
+    (control) => {
+
+      control.addEventListener(
+        'click',
+        closeFilmModal
+      );
+    }
+  );
+
+
+document.addEventListener(
+  'keydown',
+  (event) => {
+
+    if (
+      event.key ===
+        'Escape' &&
+      filmModal?.classList.contains(
+        'is-open'
+      )
+    ) {
+
+      closeFilmModal();
+    }
+  }
+);
+
+
+/* ==========================================================
+   ASSET ERROR HANDLING
+========================================================== */
+
+document
+  .querySelectorAll(
+    '[data-asset-src]'
+  )
+  .forEach(
+    (asset) => {
+
+      asset.addEventListener(
+        'error',
+        () => {
+
+          asset
+            .closest(
+              '.hero-asset-slot, .about-asset-slot'
+            )
+            ?.classList.add(
+              'asset-missing'
+            );
+        }
+      );
+    }
+  );
+
+
+/* ==========================================================
+   ENQUIRY FORM
+========================================================== */
+
+const enquiryForm =
+  document.querySelector(
+    '#enquiry-form'
+  );
+
+
+const formStatus =
+  document.querySelector(
+    '.form-status'
+  );
+
+
+enquiryForm?.addEventListener(
+  'submit',
+  (event) => {
+
     event.preventDefault();
-    if (!enquiryForm.checkValidity()) {
-      enquiryForm.classList.add('is-invalid');
-      if (formStatus) formStatus.textContent = 'Please add your name, phone number and event type to continue.';
-      enquiryForm.querySelector(':invalid')?.focus();
+
+
+    if (
+      !enquiryForm.checkValidity()
+    ) {
+
+      enquiryForm.classList.add(
+        'is-invalid'
+      );
+
+
+      if (
+        formStatus
+      ) {
+
+        formStatus.textContent =
+          'Please add your name, phone number and event type to continue.';
+      }
+
+
+      enquiryForm
+        .querySelector(
+          ':invalid'
+        )
+        ?.focus();
+
+
       return;
     }
-    enquiryForm.classList.remove('is-invalid');
-    const formData = new FormData(enquiryForm);
-    const enquiryMessage = `Hello Ankit! 👋\n\nI would like to enquire about photography / films for my upcoming event.\n\nHere are my details:\n\nName: ${formData.get('name')}\nPhone / WhatsApp: ${formData.get('phone')}\nEmail: ${formData.get('email') || 'Not provided'}\nEvent Type: ${formData.get('eventType')}\nEvent Date: ${formData.get('eventDate') || 'Not provided'}\nLocation: ${formData.get('location') || 'Not provided'}\n\nA little about my story:\n${formData.get('story') || 'Not provided'}\n\nI would love to discuss the availability, requirements and suitable package with you.\n\nThank you!`;
-    if (formStatus) formStatus.textContent = 'Opening WhatsApp…';
-    openWhatsApp(enquiryMessage);
-  });
 
-const heroMedia = document.querySelector('.hero-media');
-window.addEventListener('scroll', () => {
-    if (window.innerWidth > 800 && heroMedia) heroMedia.style.transform = `translateY(${Math.min(window.scrollY * 0.08, 32)}px)`;
-  }, { passive: true });
+
+    enquiryForm.classList.remove(
+      'is-invalid'
+    );
+
+
+    const formData =
+      new FormData(
+        enquiryForm
+      );
+
+
+    const enquiryMessage =
+      `Hello Ankit! 👋
+
+I would like to enquire about photography / films for my upcoming event.
+
+Here are my details:
+
+Name: ${formData.get('name')}
+Phone / WhatsApp: ${formData.get('phone')}
+Email: ${formData.get('email') || 'Not provided'}
+Event Type: ${formData.get('eventType')}
+Event Date: ${formData.get('eventDate') || 'Not provided'}
+Location: ${formData.get('location') || 'Not provided'}
+
+A little about my story:
+${formData.get('story') || 'Not provided'}
+
+I would love to discuss the availability, requirements and suitable package with you.
+
+Thank you!`;
+
+
+    if (
+      formStatus
+    ) {
+
+      formStatus.textContent =
+        'Opening WhatsApp…';
+    }
+
+
+    openWhatsApp(
+      enquiryMessage
+    );
+  }
+);
+
+
+/* ==========================================================
+   HERO PARALLAX
+========================================================== */
+
+const heroMedia =
+  document.querySelector(
+    '.hero-media'
+  );
+
+
+window.addEventListener(
+  'scroll',
+  () => {
+
+    if (
+      window.innerWidth > 800 &&
+      heroMedia
+    ) {
+
+      heroMedia.style.transform =
+        `translateY(${Math.min(
+          window.scrollY * 0.08,
+          32
+        )}px)`;
+    }
+  },
+  {
+    passive: true
+  }
+);
+
+
+/* ==========================================================
+   INITIAL MOBILE FILM CHECK
+========================================================== */
+
+window.addEventListener(
+  'load',
+  () => {
+
+    chooseMobileFilm();
+  }
+);
