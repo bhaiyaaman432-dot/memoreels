@@ -880,58 +880,22 @@ filmItems.forEach(
   thumbnail.style.opacity = '1';
 
   // Card 02 special handling
-  if (film.dataset.film === '02') {
+if (film.dataset.film === '02') {
 
-    const possiblePaths = [
-      'images/poster-2.jpg',
-      './images/poster-2.jpg',
-      '/memoreels/images/poster-2.jpg'
-    ];
+  thumbnail.loading = 'eager';
+  thumbnail.decoding = 'sync';
 
-    let currentPath = 0;
+  thumbnail.src =
+    'https://bhaiyaaman432-dot.github.io/memoreels/images/poster-2.jpg';
 
-    const tryNextPoster = () => {
+} else {
 
-      if (currentPath >= possiblePaths.length) {
-        console.error(
-          'Memoreels: Card 02 poster could not be loaded.'
-        );
-        return;
-      }
+  thumbnail.src = asset.thumbnail;
 
-      const path = possiblePaths[currentPath];
-      currentPath++;
+  thumbnail.loading = 'lazy';
+  thumbnail.decoding = 'async';
 
-      thumbnail.src = path;
-    };
-
-    thumbnail.onload = () => {
-
-      console.log(
-        'Memoreels: Card 02 poster loaded:',
-        thumbnail.src
-      );
-
-      thumbnail.style.opacity = '1';
-
-      film
-        .querySelector('.film-poster-slot')
-        ?.classList.add('has-poster');
-    };
-
-    thumbnail.onerror = () => {
-
-      console.warn(
-        'Memoreels: Card 02 poster failed:',
-        thumbnail.src
-      );
-
-      tryNextPoster();
-    };
-
-    tryNextPoster();
-
-  } else {
+}
 
     // All other cards remain unchanged
     thumbnail.src = posterPath;
