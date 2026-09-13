@@ -869,22 +869,82 @@ filmItems.forEach(
       'none';
 
 
-    if (
-      thumbnail &&
-      asset.thumbnail
-    ) {
+   if (thumbnail && asset.thumbnail) {
 
-      thumbnail.src =
-        asset.thumbnail;
+  // Normal poster path
+  const posterPath = asset.thumbnail;
 
+  // Set the image immediately
+  thumbnail.loading = 'eager';
+  thumbnail.decoding = 'async';
+  thumbnail.style.opacity = '1';
 
-      thumbnail.loading =
-        'lazy';
+  // Card 02 special handling
+  if (film.dataset.film === '02') {
 
+    const possiblePaths = [
+      'images/poster-2.jpg',
+      './images/poster-2.jpg',
+      '/memoreels/images/poster-2.jpg'
+    ];
 
-      thumbnail.decoding =
-        'async';
-    }
+    let currentPath = 0;
+
+    const tryNextPoster = () => {
+
+      if (currentPath >= possiblePaths.length) {
+        console.error(
+          'Memoreels: Card 02 poster could not be loaded.'
+        );
+        return;
+      }
+
+      const path = possiblePaths[currentPath];
+      currentPath++;
+
+      thumbnail.src = path;
+    };
+
+    thumbnail.onload = () => {
+
+      console.log(
+        'Memoreels: Card 02 poster loaded:',
+        thumbnail.src
+      );
+
+      thumbnail.style.opacity = '1';
+
+      film
+        .querySelector('.film-poster-slot')
+        ?.classList.add('has-poster');
+    };
+
+    thumbnail.onerror = () => {
+
+      console.warn(
+        'Memoreels: Card 02 poster failed:',
+        thumbnail.src
+      );
+
+      tryNextPoster();
+    };
+
+    tryNextPoster();
+
+  } else {
+
+    // All other cards remain unchanged
+    thumbnail.src = posterPath;
+
+    thumbnail.onload = () => {
+      thumbnail.style.opacity = '1';
+
+      film
+        .querySelector('.film-poster-slot')
+        ?.classList.add('has-poster');
+    };
+  }
+}
 
 
     preview.addEventListener(
